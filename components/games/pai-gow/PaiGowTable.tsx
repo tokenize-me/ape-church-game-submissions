@@ -1127,6 +1127,23 @@ const PaiGowTable = forwardRef<PaiGowTableHandle, PaiGowTableProps>(function Pai
   backdrop-filter: blur(4px);
 }
 .btn:disabled{ opacity: 0.55; cursor: not-allowed; }
+
+.betLane{ display:flex; align-items:center; justify-content:center; gap: 14px; padding: 12px 10px 6px; }
+.betSpot{ width: 150px; height: 86px; border-radius: 999px; border: 2px solid rgba(215,225,230,0.20); display:flex; align-items:center; justify-content:center; text-align:center; background: rgba(0,0,0,0.25); position: relative; overflow: visible; }
+.betSpotMain{ width: 210px; height: 104px; border-color: rgba(140,255,0,0.22); }
+.betSpotBonus{ width: 170px; }
+.betSpotPush{ width: 150px; height: 86px; border-color: rgba(239, 185, 11, 0.32); background: rgba(60, 45, 8, 0.22); }
+.betContent{ position: relative; z-index: 3; }
+.betName{ font-weight: 950; letter-spacing: 1.1px; font-size: 12px; opacity: 0.98; color: rgba(255,255,255,0.92); text-shadow: 0 1px 0 rgba(0,0,0,0.55), 0 0 10px rgba(0,0,0,0.55); }
+.betValue{ color: rgba(255,255,255,0.92); text-shadow: 0 1px 0 rgba(0,0,0,0.6), 0 0 10px rgba(0,0,0,0.55); }
+
+.chipRack{ display:flex; gap: 8px; align-items:center; justify-content:flex-start; flex-wrap:wrap; padding: 10px 0 0; }
+.chip{ width: 52px; height: 52px; border-radius: 999px; border: 2px solid rgba(215,225,230,0.22); background: rgba(20,20,20,0.85); color: rgba(255,255,255,0.92); font-weight: 900; cursor: pointer; }
+.chipActive{ border-color: rgba(140,255,0,0.92); box-shadow: 0 0 0 2px rgba(140,255,0,0.18); }
+
+/* tighten the unstyled fallback text */
+.betFooterRow{ font-size: 12px; opacity: 0.95; }
+
       `}</style>
 
       <div className={hideHeader ? "table tableNoRail" : "table"}>
