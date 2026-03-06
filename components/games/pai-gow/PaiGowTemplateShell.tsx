@@ -63,104 +63,145 @@ export default function PaiGowTemplateShell() {
           <PaiGowTable ref={tableRef} onStatusChange={onStatusChange} />
         </div>
 
-        {showResults ? (
-          <div
-            role="dialog"
-            aria-label="Pai Gow results"
-            style={{
-              position: "absolute",
-              inset: 0,
-              zIndex: 40,
-              display: "grid",
-              placeItems: "center",
-              background: "rgba(0,0,0,0.55)",
-              backdropFilter: "blur(8px)",
-            }}
-          >
+        {showResults ? (() => {
+          const isWin = payout > 0;
+          const toneBg = isWin
+            ? "linear-gradient(135deg, rgba(51,183,123,0.95), rgba(16,185,129,0.92))"
+            : "linear-gradient(135deg, rgba(240,62,82,0.95), rgba(244,63,94,0.92))";
+          const toneBorder = isWin ? "rgba(71,184,138,0.60)" : "rgba(248,64,84,0.60)";
+
+          return (
             <div
+              role="dialog"
+              aria-label="Pai Gow results"
               style={{
-                width: "min(560px, calc(100vw - 28px))",
-                borderRadius: 18,
-                border: "1px solid rgba(215,225,230,0.16)",
-                background: "linear-gradient(180deg, rgba(18,18,18,0.96), rgba(10,10,10,0.88))",
-                boxShadow: "0 20px 80px rgba(0,0,0,0.65)",
-                padding: 14,
-                color: "rgba(255,255,255,0.92)",
-                fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, sans-serif",
+                position: "absolute",
+                inset: 0,
+                zIndex: 40,
+                display: "grid",
+                placeItems: "center",
+                background: "rgba(18,24,28,0.75)",
+                backdropFilter: "blur(6px)",
+                padding: 16,
               }}
             >
-              <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "baseline" }}>
-                <div>
-                  <div style={{ fontWeight: 950, letterSpacing: 1.4, opacity: 0.9 }}>RESULT</div>
-                  <div style={{ fontSize: 12, opacity: 0.7, marginTop: 4 }}>Pai Gow (Face Up)</div>
-                </div>
-                <div style={{ fontSize: 26, fontWeight: 950, letterSpacing: 0.6 }}>
-                  {payout >= 0 ? "+" : ""}{format(payout)} APE
-                </div>
-              </div>
-
-              <div style={{ marginTop: 12, padding: 12, borderRadius: 16, border: "1px solid rgba(215,225,230,0.12)", background: "rgba(0,0,0,0.18)" }}>
-                <div style={{ display: "grid", gap: 8, fontSize: 13 }}>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <div style={{ fontWeight: 900, opacity: 0.8 }}>Main bet</div>
-                    <div>{format(breakdown?.main.wager)} → <strong>{format(breakdown?.main.payout)}</strong></div>
+              <div
+                style={{
+                  width: "min(520px, calc(100vw - 28px))",
+                  borderRadius: 24,
+                  border: `4px solid ${toneBorder}`,
+                  background: toneBg,
+                  boxShadow: `0 20px 80px ${isWin ? "rgba(34,197,94,0.35)" : "rgba(239,68,68,0.35)"}`,
+                  padding: 18,
+                  color: "rgba(255,255,255,0.96)",
+                  transform: "rotate(-1deg)",
+                }}
+              >
+                <div style={{ textAlign: "center" }}>
+                  <div style={{ fontWeight: 950, fontSize: 34, letterSpacing: 1.2, textShadow: "0 4px 12px rgba(0,0,0,0.35)" }}>
+                    {isWin ? "You Won!" : "Try Again!"}
                   </div>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <div style={{ fontWeight: 900, opacity: 0.8 }}>Bonus bet</div>
-                    <div>
-                      {format(breakdown?.bonus.wager)} → <strong>{format(breakdown?.bonus.payout)}</strong>
-                      {breakdown?.bonus.hit ? (
-                        <span style={{ opacity: 0.75, marginLeft: 8 }}>
-                          ({breakdown.bonus.hit.name} x{breakdown.bonus.hit.multiplier})
-                        </span>
-                      ) : null}
-                    </div>
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <div style={{ fontWeight: 900, opacity: 0.8 }}>Push bet</div>
-                    <div>
-                      {format(breakdown?.push.wager)} → <strong>{format(breakdown?.push.payout)}</strong>
-                      {breakdown?.push.hit ? (
-                        <span style={{ opacity: 0.75, marginLeft: 8 }}>
-                          ({breakdown.push.hit.name} x{breakdown.push.hit.multiplier})
-                        </span>
-                      ) : null}
-                    </div>
-                  </div>
-                  {breakdown?.outcome ? (
-                    <div style={{ marginTop: 2, fontSize: 12, opacity: 0.7 }}>
-                      Outcome: {breakdown.outcome}{breakdown.dealerAceHighPaiGow ? " • Dealer Ace High Pai Gow" : ""}
+                  {isWin ? (
+                    <div style={{ marginTop: 8, fontWeight: 950, fontSize: 44, color: "rgba(255,255,255,0.98)" }}>
+                      {format(payout)} APE
                     </div>
                   ) : null}
                 </div>
-              </div>
 
-              <div style={{ marginTop: 12, display: "flex", gap: 10, justifyContent: "flex-end", flexWrap: "wrap" }}>
-                <button
-                  className="btn"
-                  onClick={onRewatch}
-                  style={{ padding: "10px 14px", borderRadius: 12, border: "1px solid rgba(215,225,230,0.18)", background: "rgba(20,20,20,0.80)" }}
+                {/* Breakdown */}
+                <div
+                  style={{
+                    marginTop: 14,
+                    padding: 12,
+                    borderRadius: 18,
+                    border: "1px solid rgba(255,255,255,0.18)",
+                    background: "rgba(0,0,0,0.20)",
+                  }}
                 >
-                  Rewatch
-                </button>
-                <button
-                  className="btn"
-                  onClick={onReset}
-                  style={{ padding: "10px 14px", borderRadius: 12, border: "1px solid rgba(215,225,230,0.18)", background: "rgba(20,20,20,0.80)" }}
-                >
-                  Change bet
-                </button>
-                <button
-                  className="btn"
-                  onClick={onPlayAgain}
-                  style={{ padding: "10px 14px", borderRadius: 12, border: "1px solid rgba(140,255,0,0.22)", background: "rgba(10,12,10,0.92)" }}
-                >
-                  Play again
-                </button>
+                  <div style={{ display: "grid", gap: 8, fontSize: 13 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", gap: 10 }}>
+                      <div style={{ fontWeight: 900, opacity: 0.9 }}>Main</div>
+                      <div>{format(breakdown?.main.wager)} → <strong>{format(breakdown?.main.payout)}</strong></div>
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between", gap: 10 }}>
+                      <div style={{ fontWeight: 900, opacity: 0.9 }}>Bonus</div>
+                      <div>
+                        {format(breakdown?.bonus.wager)} → <strong>{format(breakdown?.bonus.payout)}</strong>
+                        {breakdown?.bonus.hit ? (
+                          <span style={{ opacity: 0.85, marginLeft: 8 }}>
+                            ({breakdown.bonus.hit.name} x{breakdown.bonus.hit.multiplier})
+                          </span>
+                        ) : null}
+                      </div>
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between", gap: 10 }}>
+                      <div style={{ fontWeight: 900, opacity: 0.9 }}>Push</div>
+                      <div>
+                        {format(breakdown?.push.wager)} → <strong>{format(breakdown?.push.payout)}</strong>
+                        {breakdown?.push.hit ? (
+                          <span style={{ opacity: 0.85, marginLeft: 8 }}>
+                            ({breakdown.push.hit.name} x{breakdown.push.hit.multiplier})
+                          </span>
+                        ) : null}
+                      </div>
+                    </div>
+                    {breakdown?.outcome ? (
+                      <div style={{ marginTop: 2, fontSize: 12, opacity: 0.85 }}>
+                        Outcome: <strong>{breakdown.outcome}</strong>
+                        {breakdown.dealerAceHighPaiGow ? " • Dealer Ace High Pai Gow" : ""}
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div style={{ marginTop: 14, display: "grid", gap: 10 }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                    <button
+                      onClick={onReset}
+                      style={{
+                        padding: "12px 14px",
+                        borderRadius: 14,
+                        border: `1px solid ${toneBorder}`,
+                        background: "rgba(255,255,255,0.14)",
+                        color: "rgba(255,255,255,0.96)",
+                        fontWeight: 900,
+                      }}
+                    >
+                      Change bet
+                    </button>
+                    <button
+                      onClick={onRewatch}
+                      style={{
+                        padding: "12px 14px",
+                        borderRadius: 14,
+                        border: `1px solid ${toneBorder}`,
+                        background: "rgba(255,255,255,0.14)",
+                        color: "rgba(255,255,255,0.96)",
+                        fontWeight: 900,
+                      }}
+                    >
+                      Rewatch
+                    </button>
+                  </div>
+                  <button
+                    onClick={onPlayAgain}
+                    style={{
+                      padding: "12px 14px",
+                      borderRadius: 14,
+                      border: "1px solid rgba(39,53,61,0.85)",
+                      background: "rgba(29,40,46,0.92)",
+                      color: "rgba(255,255,255,0.96)",
+                      fontWeight: 950,
+                    }}
+                  >
+                    Play again
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ) : null}
+          );
+        })() : null}
       </GameWindow>
     </div>
   );

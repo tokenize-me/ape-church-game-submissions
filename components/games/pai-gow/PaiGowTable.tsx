@@ -317,6 +317,28 @@ const PaiGowTable = forwardRef<PaiGowTableHandle, PaiGowTableProps>(function Pai
   const allPlayerRevealed = useMemo(() => playerFlipped.every(Boolean), [playerFlipped]);
   const canSplit = dealerArranged && allPlayerRevealed;
 
+  const dealerSlotHigh = useMemo(() => {
+    const slots: (Card | null)[] = Array(5).fill(null);
+    for (let i = 0; i < view.dealerTargets.length; i++) {
+      const t = view.dealerTargets[i];
+      if (t.row === "high" && t.slot >= 0 && t.slot < 5) slots[t.slot] = view.house7[i];
+    }
+    return slots;
+  }, [view.dealerTargets, view.house7]);
+
+  const dealerSlotLow = useMemo(() => {
+    const slots: (Card | null)[] = Array(2).fill(null);
+    for (let i = 0; i < view.dealerTargets.length; i++) {
+      const t = view.dealerTargets[i];
+      if (t.row === "low" && t.slot >= 0 && t.slot < 2) slots[t.slot] = view.house7[i];
+    }
+    return slots;
+  }, [view.dealerTargets, view.house7]);
+
+  const dealerAllFlipped = useMemo(() => dealerFlipped.every(Boolean), [dealerFlipped]);
+  const dealerSlotsFaceDown = !dealerAllFlipped;
+
+
   // Bets must be placed before any cards are flipped, then locked.
   const betsLocked = dealerRevealed;
   const hasMainBet = mainChips.length > 0 && main > 0;
@@ -1059,32 +1081,43 @@ const PaiGowTable = forwardRef<PaiGowTableHandle, PaiGowTableProps>(function Pai
               </div>
             </div>
 
-            {!dealerArranged ? (
-              <div className="cardsRow cardsRowScroll">
-                {view.house7.map((c, i) => (
-                  <CardFace key={`house-${i}`} card={c} faceDown={!dealerFlipped[i]} />
-                ))}
-              </div>
-            ) : (
-              <div style={{ display: "grid", gap: 10 }}>
-                <div>
-                  <div style={{ fontWeight: 900, opacity: 0.75, letterSpacing: 0.6, fontSize: 12, marginBottom: 8 }}>HIGH (5)</div>
-                  <div className="cardsRow cardsRowScroll">
-                    {view.houseSplit.high.map((c, i) => (
-                      <CardFace key={`house-high-${i}`} card={c} faceDown={false} tone="high" />
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <div style={{ fontWeight: 900, opacity: 0.75, letterSpacing: 0.6, fontSize: 12, marginBottom: 8 }}>LOW (2)</div>
-                  <div className="cardsRow cardsRowScroll">
-                    {view.houseSplit.low.map((c, i) => (
-                      <CardFace key={`house-low-${i}`} card={c} faceDown={false} tone="low" />
-                    ))}
-                  </div>
+            {/* Always reserve the arranged layout space so the dealer area never "drops" down on split. */}
+            <div style={{ display: "grid", gap: 10, flex: 1 }}>
+              <div>
+                <div style={{ fontWeight: 900, opacity: 0.75, letterSpacing: 0.6, fontSize: 12, marginBottom: 8 }}>HIGH (5)</div>
+                <div className="cardsRow cardsRowScroll">
+                  {(dealerArranged ? view.houseSplit.high : dealerSlotHigh).map((c, i) =>
+                    c ? (
+                      <CardFace
+                        key={`house-high-${i}`}
+                        card={c}
+                        faceDown={dealerSlotsFaceDown}
+                        tone={dealerArranged ? "high" : "neutral"}
+                      />
+                    ) : (
+                      <CardSlot key={`house-high-slot-${i}`} />
+                    ),
+                  )}
                 </div>
               </div>
-            )}
+              <div>
+                <div style={{ fontWeight: 900, opacity: 0.75, letterSpacing: 0.6, fontSize: 12, marginBottom: 8 }}>LOW (2)</div>
+                <div className="cardsRow cardsRowScroll">
+                  {(dealerArranged ? view.houseSplit.low : dealerSlotLow).map((c, i) =>
+                    c ? (
+                      <CardFace
+                        key={`house-low-${i}`}
+                        card={c}
+                        faceDown={dealerSlotsFaceDown}
+                        tone={dealerArranged ? "low" : "neutral"}
+                      />
+                    ) : (
+                      <CardSlot key={`house-low-slot-${i}`} />
+                    ),
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
 
           <div
