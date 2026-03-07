@@ -42,20 +42,6 @@ export default function PaiGowTemplateShell() {
 
   return (
     <div className="pgShell">
-      {/*
-        GameWindow's background <Image> uses a fixed 1:1 intrinsic ratio (719x719),
-        which can make the outer frame too tall. We constrain the frame height here
-        so the bottom doesn't have a huge dead area (leave room for audio buttons).
-      */}
-      <style>{`
-        /* Desktop-only: constrain the whole GameWindow so the perimeter box isn't excessively tall */
-        @media (min-width: 700px){
-          .pgWindowWrap{ height: min(820px, calc(100vh - 180px)); display:flex; }
-          /* GameWindow root is the first child div; force it to respect our wrapper height */
-          .pgWindowWrap > div{ height: 100%; }
-        }
-      `}</style>
-      <div className="pgWindowWrap">
       <GameWindow
         game={paiGow}
         isLoading={!!status?.isLoading}
@@ -217,7 +203,6 @@ export default function PaiGowTemplateShell() {
           );
         })() : null}
       </GameWindow>
-      </div>
     </div>
   );
 }

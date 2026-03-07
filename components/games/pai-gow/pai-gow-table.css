@@ -10,46 +10,44 @@
 }
 
 .tableWrap{
-  /* Let content define the overall GameWindow height (prevents the huge empty bottom area). */
+  /* When embedded in the template GameWindow, let the parent background show through. */
+  min-height: 100%;
+  height: 100%;
   background: transparent;
   color: var(--text);
-  /* Leave breathing room for the GameWindow audio buttons (bottom-right). */
-  padding-bottom: 64px;
 }
 
 .pgLayout{
   display: block;
+  height: 100%;
 }
 
 /* Desktop: fill the GameWindow like other Ape.church games (game left, betting sidebar right) */
 @media (min-width: 700px){
-  /* Desktop: make the table fill the constrained GameWindow height */
-  .tableWrap{ height: 100%; min-height: 0; padding-bottom: 0; }
-  .table{ max-width: 100%; width: 100%; height: 100%; padding: 14px 14px 78px; box-sizing: border-box; }
+  /* Fill the GameWindow on desktop like other Ape.church games */
+  .table{ max-width: 100%; width: 100%; padding: 14px; }
   .pgLayout{
     display: grid;
     grid-template-columns: 1fr 360px;
     gap: 14px;
     align-items: start;
-    height: 100%;
   }
 
-  /* Main playfield on the LEFT */
+  /* Main playfield on the LEFT: fill the GameWindow height (no forced square) */
   .felt{
     grid-column: 1;
     margin-top: 0;
 
-    width: 100%;
     height: 100%;
+    width: 100%;
     overflow: hidden;
   }
-
-  .pgSidebar{ height: 100%; }
 
   /* Sidebar on the RIGHT: separate vertical rectangle (image on top, bets below) */
   /* Right panel: ONE bordered vertical rectangle (banner stacked on top of bets/chips) */
   .pgSidebar{
     grid-column: 2;
+    height: 100%;
     display: flex;
     flex-direction: column;
     overflow: hidden;
