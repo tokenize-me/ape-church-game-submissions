@@ -16,6 +16,7 @@
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
+  overflow-y: hidden; /* desktop: never show an internal scrollbar inside the main square */
   background: transparent;
   color: var(--text);
 }
