@@ -1083,34 +1083,41 @@ const PaiGowTable = forwardRef<PaiGowTableHandle, PaiGowTableProps>(function Pai
               </div>
             </div>
 
-            {/* Dealer: show the 7-card rack first. Keep enough height reserved so later arranged High/Low doesn't shift the layout. */}
-            <div style={{ display: "grid", gap: 10, flex: 1 }}>
-              {!dealerArranged ? (
-                <div className="cardsRow cardsRowScroll" style={{ minHeight: "calc(var(--cardH, 100px) + 18px)" }}>
-                  {view.house7.map((c, i) => (
-                    <CardFace key={`house-${i}`} card={c} faceDown={!dealerFlipped[i]} />
+            {/* Dealer: reserve the FULL arranged height from the very start so nothing "drops" when the split layout appears. */}
+            <div style={{ display: "grid", gridTemplateRows: "auto auto", gap: 8, flex: 1, minHeight: 0 }}>
+              {/* HIGH row */}
+              <div>
+                {dealerArranged ? (
+                  <div style={{ fontWeight: 900, opacity: 0.75, letterSpacing: 0.6, fontSize: 12, marginBottom: 4 }}>HIGH (5)</div>
+                ) : null}
+
+                {/* Before arranged: show the 7-card rack in the HIGH row (clean start view). */}
+                <div className="cardsRow cardsRowScroll">
+                  {(dealerArranged ? view.houseSplit.high : view.house7).map((c, i) => (
+                    <CardFace
+                      key={dealerArranged ? `house-high-${i}` : `house-${i}`}
+                      card={c}
+                      faceDown={dealerArranged ? false : !dealerFlipped[i]}
+                      tone={dealerArranged ? "high" : undefined}
+                    />
                   ))}
                 </div>
-              ) : (
-                <>
-                  <div>
-                    <div style={{ fontWeight: 900, opacity: 0.75, letterSpacing: 0.6, fontSize: 12, marginBottom: 4 }}>HIGH (5)</div>
-                    <div className="cardsRow cardsRowScroll">
-                      {view.houseSplit.high.map((c, i) => (
-                        <CardFace key={`house-high-${i}`} card={c} faceDown={false} tone="high" />
-                      ))}
-                    </div>
-                  </div>
-                  <div>
-                    <div style={{ fontWeight: 900, opacity: 0.75, letterSpacing: 0.6, fontSize: 12, marginBottom: 4 }}>LOW (2)</div>
-                    <div className="cardsRow cardsRowScroll">
-                      {view.houseSplit.low.map((c, i) => (
-                        <CardFace key={`house-low-${i}`} card={c} faceDown={false} tone="low" />
-                      ))}
-                    </div>
-                  </div>
-                </>
-              )}
+              </div>
+
+              {/* LOW row (kept in layout even before arranged, but hidden) */}
+              <div style={!dealerArranged ? ({ visibility: "hidden" } as React.CSSProperties) : undefined}>
+                <div style={{ fontWeight: 900, opacity: 0.75, letterSpacing: 0.6, fontSize: 12, marginBottom: 4 }}>LOW (2)</div>
+                <div className="cardsRow cardsRowScroll">
+                  {(dealerArranged ? view.houseSplit.low : [view.house7[0], view.house7[1]]).map((c, i) => (
+                    <CardFace
+                      key={dealerArranged ? `house-low-${i}` : `house-low-ph-${i}`}
+                      card={c}
+                      faceDown={dealerArranged ? false : true}
+                      tone={dealerArranged ? "low" : undefined}
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 
