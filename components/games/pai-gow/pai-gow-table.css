@@ -233,13 +233,21 @@
   .cardsRowScroll{ padding-right: 0; }
 }
 
-/* Dealer/player zones: solid black (no extra background art behind the main square). */
+/* Add subtle art back into dealer/player zones (provided assets) */
 .dealerZone{
-  background: #000;
+  background-image: url('/submissions/pai-gow/dealer-zone-bg.jpg');
+  background-size: cover;
+  background-position: 50% 40%;
+  background-repeat: no-repeat;
+  background-color: rgba(0,0,0,0.35);
 }
 
 .playerZone{
-  background: #000;
+  background-image: url('/submissions/pai-gow/player-zone-bg.jpg');
+  background-size: cover;
+  background-position: 50% 35%;
+  background-repeat: no-repeat;
+  background-color: rgba(0,0,0,0.35);
 }
 
 
