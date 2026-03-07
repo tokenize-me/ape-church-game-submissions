@@ -81,6 +81,7 @@ export default function PaiGowTemplateShell() {
             game={paiGow}
             isLoading={!!status?.isLoading}
             isGameFinished={showResults}
+            customHeightMobile="980px"
             betAmount={betAmount}
             payout={payout}
             inReplayMode={false}
