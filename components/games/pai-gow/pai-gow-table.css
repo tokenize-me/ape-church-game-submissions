@@ -33,8 +33,8 @@
 
   /* Keep zones from forcing the felt taller than the GameWindow square */
   .felt{ min-height: 0; display:flex; flex-direction: column; }
-  .dealerZone{ flex: 0 0 34%; min-height: 0; }
-  .playerZone{ flex: 1 1 66%; min-height: 0; overflow-y: auto; overflow-x: hidden; }
+  .dealerZone{ flex: 0 0 38%; min-height: 0; }
+  .playerZone{ flex: 1 1 62%; min-height: 0; overflow-y: auto; overflow-x: hidden; }
 
   /* Fill the GameWindow on desktop like other Ape.church games */
   .table{ max-width: 100%; width: 100%; padding: 14px; }
@@ -195,7 +195,7 @@
 /* Desktop: let dealer/player art hit the rounded felt edges (no inner letterbox padding). */
 @media (min-width: 700px){
   .dealerZone,
-  .playerZone{ padding: 10px; }
+  .playerZone{ padding: 8px; }
 }
 
 /* Add subtle art back into dealer/player zones (provided assets) */
