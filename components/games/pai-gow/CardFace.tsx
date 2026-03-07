@@ -43,7 +43,13 @@ function cardImageName(rank: string, suit: string) {
 
 export function CardFace({ card, onClick, tone = 'neutral', faceDown = false, title }: Props) {
   const border =
-    tone === 'low' ? 'var(--ac-blue)' : tone === 'high' ? 'var(--ac-gold)' : 'rgba(0,0,0,0.25)'
+    faceDown
+      ? 'rgba(0,0,0,0.95)'
+      : tone === 'low'
+        ? 'var(--ac-blue)'
+        : tone === 'high'
+          ? 'var(--ac-gold)'
+          : 'rgba(0,0,0,0.25)'
 
   const accentShadow =
     tone === 'low'
@@ -94,7 +100,7 @@ export function CardFace({ card, onClick, tone = 'neutral', faceDown = false, ti
         height: 'var(--cardH, 100px)',
         borderRadius: 14,
         // Keep an outline, but remove the inner "bubble" styling.
-        border: `1px solid ${border}`,
+        border: `2px solid ${border}`,
         background: faceDown ? cardBackBg : usePngFace ? '#ffffff' : faceBg,
         boxShadow: `${accentShadow}, 0 10px 24px rgba(0,0,0,0.28)`,
         display: 'grid',
