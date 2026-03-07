@@ -553,7 +553,9 @@
     align-items: flex-start;
     gap: 10px;
     flex-wrap: wrap;
-    min-height: 148px;
+    /* Mobile: give the header art a bit more vertical room + bias the crop upward */
+    min-height: 176px;
+    background-position: 55% 18%;
   }
 
   .brand{
