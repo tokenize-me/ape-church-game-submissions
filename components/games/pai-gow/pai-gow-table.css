@@ -498,8 +498,11 @@
 }
 
 .btn:disabled{
-  opacity: 0.55;
+  /* Keep label readable even when disabled */
+  opacity: 1;
+  color: #ffffff;
   cursor: not-allowed;
+  filter: brightness(0.92);
 }
 
 /* ---------------------------
