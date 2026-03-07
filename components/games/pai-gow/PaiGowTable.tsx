@@ -1191,7 +1191,7 @@ const PaiGowTable = forwardRef<PaiGowTableHandle, PaiGowTableProps>(function Pai
                     </div>
                   </div>
                   <div>
-                    <div style={{ fontWeight: 900, opacity: 0.85, letterSpacing: 0.6, fontSize: 12, marginBottom: 4 }}>HIGH (5)</div>
+                    <div style={{ fontWeight: 950, opacity: 1, letterSpacing: 0.8, fontSize: 13, marginBottom: 4, color: "rgba(255,255,255,0.95)", textShadow: "0 1px 0 rgba(0,0,0,0.75)" }}>HIGH (5)</div>
                     <div className="cardsRow">
                       {highIdx.map((i) => (
                         <CardFace key={i} card={view.player7[i]} tone="high" onClick={() => removeFromHigh(i)} />
