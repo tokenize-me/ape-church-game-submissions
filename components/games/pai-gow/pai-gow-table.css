@@ -130,7 +130,12 @@
   }
 
   .betSpotMain{ height: 104px; }
+
+  /* Sidebar chip rack: tighten so all chips fit within the pinned sidebar height */
+  .chipRack{ gap: 6px; padding-top: 6px; }
+  .chip{ width: 46px; height: 46px; }
 }
+
 
 .table{
   max-width: 1200px;
