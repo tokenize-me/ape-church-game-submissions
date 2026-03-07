@@ -13,10 +13,6 @@
   /* When embedded in the template GameWindow, let the parent background show through. */
   min-height: 100%;
   height: 100%;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-  overflow-y: hidden; /* desktop: never show an internal scrollbar inside the main square */
   background: transparent;
   color: var(--text);
 }
@@ -28,15 +24,8 @@
 
 /* Desktop: fill the GameWindow like other Ape.church games (game left, betting sidebar right) */
 @media (min-width: 700px){
-  /* Desktop: keep dealer sizing stable; tighten ONLY the player area so nothing clips. */
+  /* Desktop: smaller cards so split + result always fit in the fixed GameWindow square */
   :root{ --cardW: 56px; --cardH: 78px; }
-
-  .playerZone{
-    --cardW: 50px;
-    --cardH: 70px;
-  }
-
-  .playerZone .cardsRow{ gap: 8px; }
 
   /* Reserve status line height so the header doesn't reflow when text changes. */
   .dealerStatus{ min-height: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -56,10 +45,8 @@
 
   /* Keep zones from forcing the felt taller than the GameWindow square */
   .felt{ min-height: 0; display:flex; flex-direction: column; }
-  /* Desktop: restore the original vertical balance so the dealer art fills correctly. */
   .dealerZone{ flex: 0 0 38%; min-height: 0; }
-  /* Desktop: no internal scrollbars inside the main square (match template framing). */
-  .playerZone{ flex: 1 1 62%; min-height: 0; overflow: hidden; }
+  .playerZone{ flex: 1 1 62%; min-height: 0; overflow-y: auto; overflow-x: hidden; }
 
   /* Fill the GameWindow on desktop like other Ape.church games */
   .table{ max-width: 100%; width: 100%; padding: 14px; }
@@ -163,20 +150,9 @@
 
 
 .table{
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 8px 8px 10px;
-}
-
-/* Never allow the embedded game to overflow the GameWindow horizontally (fixes iPhone right-edge clipping). */
-.rail,
-.felt,
-.betZone{
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
 }
 
 .felt{
@@ -251,10 +227,10 @@
   .dealerZone,
   .playerZone{ padding: 4px; }
 
-  .zoneHeader{ margin-bottom: 4px; }
+  .zoneHeader{ margin-bottom: 6px; }
 
   /* Reduce right-side breathing room so rows visually touch the side rails. */
-  .cardsRowScroll{ padding-right: 0; padding-bottom: 2px; }
+  .cardsRowScroll{ padding-right: 0; }
 }
 
 /* Add subtle art back into dealer/player zones (provided assets) */
@@ -296,18 +272,11 @@
   margin-bottom: 10px;
 }
 
-/* Make secondary labels (YOUR SPLIT, LOW/HIGH labels, Assign to) closer to white */
-.felt :is(div,span){
-  color: inherit;
-}
-
 .zoneLabel{
-  font-weight: 1000;
-  letter-spacing: 1.3px;
-  font-size: 18px;
-  opacity: 1;
-  color: #ffffff;
-  text-shadow: 0 1px 0 rgba(0,0,0,0.78);
+  font-weight: 900;
+  letter-spacing: 0.6px;
+  font-size: 12px;
+  opacity: 0.85;
 }
 
 .cardsRow{
@@ -507,7 +476,7 @@
   /* Put controls into the empty banner area on the top-right (like the screenshot callout) */
   position: absolute;
   right: 16px;
-  top: 50%;
+  top: 40%;
   transform: translateY(-50%);
 }
 
@@ -521,19 +490,15 @@
   border-radius: 12px;
   border: 1px solid rgba(215,225,230,0.18);
   background: rgba(20,20,20,0.80);
-  color: rgba(255,255,255,0.96);
-  font-weight: 900;
+  color: var(--text);
+  font-weight: 800;
   cursor: pointer;
   backdrop-filter: blur(4px);
-  text-shadow: 0 1px 0 rgba(0,0,0,0.65);
 }
 
 .btn:disabled{
-  /* Keep label readable even when disabled */
-  opacity: 1;
-  color: #ffffff;
+  opacity: 0.55;
   cursor: not-allowed;
-  filter: brightness(0.92);
 }
 
 /* ---------------------------
@@ -545,43 +510,21 @@
     --cardH: 88px;
   }
 
-  /* Mobile: restore the original lighter/smaller label sizing (desktop-only tweaks were too big). */
-  .zoneLabel{
-    font-weight: 900;
-    letter-spacing: 0.6px;
-    font-size: 12px;
-    opacity: 0.85;
-    color: rgba(255,255,255,0.92);
-    text-shadow: 0 1px 0 rgba(0,0,0,0.65);
-  }
-
   .table{
     padding: 12px 10px 18px;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-
-  .rail,
-  .felt,
-  .betZone{
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
   }
 
   .rail{
     align-items: flex-start;
     gap: 10px;
     flex-wrap: wrap;
-    /* Mobile/tablet: give the header art a bit more vertical room */
-    min-height: 176px;
+    min-height: 148px;
   }
 
   .brand{
-    flex: 1 1 auto;
-    min-width: 0;
-    padding-right: 140px; /* leave space for top-right controls */
+    flex: 1 1 240px;
+    min-width: 240px;
+    padding-right: 160px; /* leave space for top-right controls */
   }
 
   .controls{
@@ -600,16 +543,6 @@
   .zoneHeader{
     align-items: flex-start;
     flex-wrap: wrap;
-    max-width: 100%;
-  }
-
-  /* Prevent long button rows / inline controls from forcing horizontal overflow */
-  .zoneHeader > div{
-    max-width: 100%;
-  }
-
-  .zoneHeader button{
-    max-width: 100%;
   }
 
   /* Mobile: bets as a 2x2 grid so nothing gets cut off */
@@ -671,24 +604,6 @@
     /* Slightly larger so facedown cards don't look tiny; still fits 7 across on iPhone. */
     --cardW: 48px;
     --cardH: 66px;
-  }
-
-  /* iPhone (Telegram): use the original header art (desktop version crops wrong) */
-  .rail{
-    background-image: url('/submissions/pai-gow/header-bg-mobile.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: 50% 6%;
-    min-height: 190px;
-  }
-
-  /* iPhone: make the PLAYER control row wrap cleanly (no right-edge clipping). */
-  .playerZone .zoneHeader > div{
-    justify-content: flex-start !important;
-  }
-  .playerZone .zoneHeader > div button{
-    flex: 1 1 auto;
-    min-width: 0;
   }
 
   /* chip footer: keep everything visible + stop right-edge clipping */
