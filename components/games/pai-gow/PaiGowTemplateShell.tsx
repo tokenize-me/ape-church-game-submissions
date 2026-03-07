@@ -140,6 +140,8 @@ export default function PaiGowTemplateShell() {
             onRewatch={onRewatch}
             currentGameId={gameId}
             disableBuiltInSong={true}
+            /* Let the in-table RESULT be visible briefly before the modal covers it. */
+            resultModalDelayMs={900}
           >
             {/* GameWindow renders a background image; mount Pai Gow UI as an overlay on top of it. */}
             <div style={{ position: "absolute", inset: 0, zIndex: 10 }}>
