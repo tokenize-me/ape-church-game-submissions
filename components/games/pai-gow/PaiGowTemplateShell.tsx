@@ -44,10 +44,11 @@ export default function PaiGowTemplateShell() {
 
   // Show results modal when the hand finishes, but allow user to dismiss it
   // to view the in-table RESULT panel underneath.
+  // Keep a slight delay so the in-table RESULT can be seen briefly before the modal covers it.
   useEffect(() => {
     if (isFinished) {
-      setShowResultsModal(true);
-      return;
+      const id = window.setTimeout(() => setShowResultsModal(true), 900);
+      return () => window.clearTimeout(id);
     }
     setShowResultsModal(false);
   }, [isFinished]);
