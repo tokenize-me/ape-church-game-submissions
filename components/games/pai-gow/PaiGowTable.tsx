@@ -201,7 +201,7 @@ const PaiGowTable = forwardRef<PaiGowTableHandle, PaiGowTableProps>(function Pai
 
   const [playerFlipped, setPlayerFlipped] = useState<boolean[]>(() => Array(7).fill(false));
   // Visual aid: sort your revealed pool to scan hands faster.
-  const [playerSort, setPlayerSort] = useState<"none" | "asc" | "desc">("asc");
+  const [playerSort, setPlayerSort] = useState<"asc" | "desc">("asc");
 
   const view = useMemo(() => {
     const seedU32 = hashSeedToU32(seed);
@@ -298,8 +298,6 @@ const PaiGowTable = forwardRef<PaiGowTableHandle, PaiGowTableProps>(function Pai
   }, [lowIdx, highIdx]);
 
   const displayPoolIdx = useMemo(() => {
-    if (playerSort === "none") return poolIdx;
-
     const dir = playerSort === "asc" ? 1 : -1;
     return [...poolIdx].sort((ia, ib) => {
       // Keep unrevealed cards at the end once dealer arranged.
@@ -1164,10 +1162,10 @@ const PaiGowTable = forwardRef<PaiGowTableHandle, PaiGowTableProps>(function Pai
                 </button>
                 <button
                   className="btn"
-                  onClick={() => setPlayerSort((s) => (s === "asc" ? "desc" : s === "desc" ? "none" : "asc"))}
+                  onClick={() => setPlayerSort((s) => (s === "asc" ? "desc" : "asc"))}
                   disabled={!dealerArranged}
                 >
-                  Sort: {playerSort === "asc" ? "Low→High" : playerSort === "desc" ? "High→Low" : "Off"}
+                  Sort: {playerSort === "asc" ? "Low→High" : "High→Low"}
                 </button>
               </div>
             </div>
