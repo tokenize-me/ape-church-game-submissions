@@ -24,17 +24,17 @@
 
 /* Desktop: fill the GameWindow like other Ape.church games (game left, betting sidebar right) */
 @media (min-width: 700px){
-  /* Desktop: slightly smaller cards so split + result always fit in the fixed GameWindow square */
-  :root{ --cardW: 64px; --cardH: 90px; }
+  /* Desktop: smaller cards so split + result always fit in the fixed GameWindow square */
+  :root{ --cardW: 58px; --cardH: 82px; }
 
   /* Prevent vertical growth from card wrapping on desktop (wrapping causes the table to "drop") */
   .cardsRow{ flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
   .cardsRowScroll{ flex-wrap: nowrap; overflow-x: auto; }
 
   /* Keep zones from forcing the felt taller than the GameWindow square */
-  .felt{ min-height: 0; }
-  .dealerZone{ flex: 0 0 42%; min-height: 0; }
-  .playerZone{ flex: 1 1 auto; min-height: 0; }
+  .felt{ min-height: 0; display:flex; flex-direction: column; }
+  .dealerZone{ flex: 0 0 38%; min-height: 0; }
+  .playerZone{ flex: 1 1 62%; min-height: 0; overflow: hidden; }
 
   /* Fill the GameWindow on desktop like other Ape.church games */
   .table{ max-width: 100%; width: 100%; padding: 14px; }
