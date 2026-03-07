@@ -517,12 +517,9 @@
    --------------------------- */
 @media (max-width: 820px){
   :root{
-    --cardW: 58px;
-    --cardH: 82px;
+    --cardW: 62px;
+    --cardH: 88px;
   }
-
-  /* Mobile: allow the table to scroll inside the GameWindow square instead of clipping sections */
-  .felt{ overflow-y: auto; }
 
   .table{
     padding: 12px 10px 18px;
