@@ -540,11 +540,13 @@
   /* Mobile: always use the OLD header art (Telegram iPhone). */
   @media (max-width: 520px){
     .rail{
+      /* iPhone: use the OLD header art and FIT it (no cropping) */
       background-image: url('/submissions/pai-gow/header-bg-mobile.jpg') !important;
-      background-size: cover !important;
+      background-size: contain !important;
       background-repeat: no-repeat !important;
-      background-position: 50% 18% !important;
-      min-height: 176px;
+      background-position: 50% 50% !important;
+      background-color: rgba(0,0,0,0.10);
+      min-height: 210px;
     }
 
     /* Prevent any horizontal drift */
