@@ -285,10 +285,12 @@
 }
 
 .zoneLabel{
-  font-weight: 900;
-  letter-spacing: 0.6px;
-  font-size: 12px;
-  opacity: 0.85;
+  font-weight: 1000;
+  letter-spacing: 0.9px;
+  font-size: 13px;
+  opacity: 1;
+  color: rgba(255,255,255,0.98);
+  text-shadow: 0 2px 0 rgba(0,0,0,0.70);
 }
 
 .cardsRow{
@@ -601,6 +603,17 @@
     .brand .subStep{
       display: block;
       white-space: nowrap; /* keep "dealer flips →" on one line */
+    }
+
+    /* Mobile: make DEALER / PLAYER labels bigger + solid white */
+    .zoneLabel{ font-size: 16px; letter-spacing: 1.2px; }
+
+    /* Mobile: dealer results line after arranged = solid white + readable */
+    .dealerZone[data-arranged="true"] .dealerStatus{
+      color: rgba(255,255,255,0.92) !important;
+      opacity: 1 !important;
+      font-weight: 800;
+      text-shadow: 0 1px 0 rgba(0,0,0,0.75);
     }
 
     .controls{
