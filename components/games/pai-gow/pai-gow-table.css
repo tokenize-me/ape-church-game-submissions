@@ -561,10 +561,24 @@
     }
 
     .brand{
-      flex: 1 1 auto;
+      /* Pin brand to the very top-left so it sits above the frog hat area */
+      position: absolute;
+      left: 12px;
+      top: 8px;
+      right: 140px; /* leave room for Place bet button on the right */
+
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+
       min-width: 0;
       padding-right: 0; /* cancel the 160px reserve used by the absolute desktop-style controls */
     }
+
+    /* Push title + instruction text to the right so it doesn't sit on top of the frog */
+    .brand > div{ padding-left: 24px; }
+    .brand .title{ font-size: 16px; line-height: 1.05; }
+    .brand .sub{ font-size: 12px; opacity: 0.78; }
 
     .controls{
       /* override max-820 absolute positioning that causes right-edge clipping */
