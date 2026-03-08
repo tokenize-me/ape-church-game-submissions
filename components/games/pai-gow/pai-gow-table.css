@@ -585,8 +585,8 @@
       margin-top: 2px;
       font-size: 12px;
       opacity: 0.78;
-      white-space: pre-line; /* respect \n */
-      max-width: 200px;
+      white-space: normal;
+      max-width: 230px; /* paragraph-style wrap like screenshot */
       line-height: 1.15;
     }
 
