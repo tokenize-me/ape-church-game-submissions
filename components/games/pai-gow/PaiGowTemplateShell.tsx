@@ -81,6 +81,7 @@ export default function PaiGowTemplateShell() {
             game={paiGow}
             isLoading={!!status?.isLoading}
             isGameFinished={showResults}
+            customHeightMobile="980px"
             betAmount={betAmount}
             payout={payout}
             inReplayMode={false}
@@ -186,7 +187,17 @@ export default function PaiGowTemplateShell() {
             resultModalDelayMs={900}
           >
             {/* GameWindow renders a background image; mount Pai Gow UI as an overlay on top of it. */}
-            <div style={{ position: "absolute", inset: 0, zIndex: 10 }}>
+            <div className="pgMobileScroller" style={{ position: "absolute", inset: 0, zIndex: 10, overflow: "hidden" }}>
+              <style>{`
+                @media (max-width: 640px){
+                  .pgMobileScroller{
+                    overflow-y: auto;
+                    overflow-x: hidden;
+                    -webkit-overflow-scrolling: touch;
+                    padding-bottom: 64px; /* keep chips clear of bottom-right audio buttons */
+                  }
+                }
+              `}</style>
               <PaiGowTable
                 ref={tableRef}
                 onStatusChange={onStatusChange}

@@ -620,6 +620,23 @@
     --cardH: 66px;
   }
 
+  /* iPhone (Telegram): lock header to OLD art + stable crop */
+  .rail{
+    background-image: url('/submissions/pai-gow/header-bg-mobile.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 18%;
+    min-height: 176px;
+  }
+
+  /* iPhone: prevent any horizontal drift */
+  .tableWrap, .table, .rail, .felt, .betZone{
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  .tableWrap{ overflow-x: hidden; }
+
   /* chip footer: keep everything visible + stop right-edge clipping */
   .betFooterRow{
     justify-content: flex-start !important;
