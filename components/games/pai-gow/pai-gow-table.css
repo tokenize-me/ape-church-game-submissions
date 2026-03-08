@@ -578,17 +578,15 @@
     /* Push title + instruction text to the right so it doesn't sit on top of the frog */
     .brand > div{
       padding-left: 44px;
-      display: flex;
-      align-items: baseline;
-      gap: 8px;
-      flex-wrap: wrap;
+      display: block;
     }
     .brand .title{ font-size: 16px; line-height: 1.05; }
     .brand .sub{
+      margin-top: 2px;
       font-size: 12px;
       opacity: 0.78;
-      white-space: normal;
-      max-width: none;
+      white-space: pre-line; /* respect \n */
+      max-width: 200px;
       line-height: 1.15;
     }
 
