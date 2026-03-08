@@ -576,9 +576,15 @@
     }
 
     /* Push title + instruction text to the right so it doesn't sit on top of the frog */
-    .brand > div{ padding-left: 24px; }
+    .brand > div{ padding-left: 44px; }
     .brand .title{ font-size: 16px; line-height: 1.05; }
-    .brand .sub{ font-size: 12px; opacity: 0.78; }
+    .brand .sub{
+      font-size: 12px;
+      opacity: 0.78;
+      white-space: normal;
+      max-width: 200px;
+      line-height: 1.15;
+    }
 
     .controls{
       /* override max-820 absolute positioning that causes right-edge clipping */
