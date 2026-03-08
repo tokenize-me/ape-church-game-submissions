@@ -77,7 +77,7 @@ export default function PaiGowTemplateShell() {
 
       const scrollH = Math.ceil(tableWrap.scrollHeight);
 
-      const scrollerPad = 64; // matches pgMobileScroller paddingBottom
+      const scrollerPad = 44; // matches pgMobileScroller paddingBottom
       const chromePad = 4; // minimal breathing room so the border clears the volume buttons
 
       // Keep a single scroll (no inner scrollbar): never undershoot the actual scrollHeight.
@@ -248,7 +248,7 @@ export default function PaiGowTemplateShell() {
             resultModalDelayMs={900}
           >
             {/* GameWindow renders a background image; mount Pai Gow UI as an overlay on top of it. */}
-            <div className="pgMobileScroller" style={{ position: "absolute", inset: 0, zIndex: 10, overflow: "hidden", paddingBottom: 64 }}>
+            <div className="pgMobileScroller" style={{ position: "absolute", inset: 0, zIndex: 10, overflow: "hidden", paddingBottom: 44 }}>
               <PaiGowTable
                 ref={tableRef}
                 onStatusChange={onStatusChange}
