@@ -589,12 +589,12 @@
       white-space: nowrap;
     }
 
-    /* Paragraph-style wrap under the title (like your close-up) */
+    /* Step lines under the title (each phrase stays on its own line) */
     .brand .sub{
       margin-top: 2px;
       font-size: 12px;
       opacity: 0.78;
-      white-space: normal;
+      white-space: pre-line; /* respect \n */
       max-width: 250px;
       line-height: 1.15;
     }
