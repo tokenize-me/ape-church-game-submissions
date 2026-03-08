@@ -723,7 +723,7 @@ const PaiGowTable = forwardRef<PaiGowTableHandle, PaiGowTableProps>(function Pai
             <img src={acLogo} alt="ApeChurch" style={{ height: 26, opacity: 0.95 }} />
             <div>
               <div className="title">Pai Gow</div>
-              <div className="sub">Pai Gow dealer flips → arranges → player flips → split</div>
+              <div className="sub">dealer flips → arranges → player flips → split</div>
             </div>
           </div>
           <div className="controls" style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
@@ -1068,7 +1068,7 @@ const PaiGowTable = forwardRef<PaiGowTableHandle, PaiGowTableProps>(function Pai
                 <img src={acLogo} alt="ApeChurch" style={{ height: 26, opacity: 0.95 }} />
                 <div>
                   <div className="title">Pai Gow</div>
-                  <div className="sub">Pai Gow dealer flips → arranges → player flips → split</div>
+                  <div className="sub">dealer flips → arranges → player flips → split</div>
                 </div>
               </div>
               <div className="controls" style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>

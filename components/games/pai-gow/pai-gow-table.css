@@ -576,13 +576,19 @@
     }
 
     /* Push title + instruction text to the right so it doesn't sit on top of the frog */
-    .brand > div{ padding-left: 44px; }
+    .brand > div{
+      padding-left: 44px;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
     .brand .title{ font-size: 16px; line-height: 1.05; }
     .brand .sub{
       font-size: 12px;
       opacity: 0.78;
       white-space: normal;
-      max-width: 200px;
+      max-width: none;
       line-height: 1.15;
     }
 
