@@ -539,6 +539,8 @@
 
   /* Mobile: always use the OLD header art (Telegram iPhone). */
   @media (max-width: 520px){
+    html, body{ overflow-x: hidden; }
+
     .rail{
       /* iPhone: use the OLD header art and FIT it (no cropping) */
       background-image: url('/submissions/pai-gow/header-bg-mobile.jpg') !important;
@@ -550,12 +552,42 @@
     }
 
     /* Prevent any horizontal drift */
-    .tableWrap, .table, .rail, .felt, .betZone{
+    .tableWrap,
+    .table,
+    .pgLayout,
+    .rail,
+    .felt,
+    .zones,
+    .zone,
+    .betZone,
+    .playerZone,
+    .dealerZone{
       width: 100%;
       max-width: 100%;
       box-sizing: border-box;
+      overflow-x: hidden;
     }
-    .tableWrap{ overflow-x: hidden; }
+
+    /* Critical: flex children must be allowed to shrink (prevents right-edge clipping in iOS/TG) */
+    .brand,
+    .controls,
+    .zoneHeader,
+    .zoneHeader > div,
+    .playerZone .zoneHeader > div{
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    /* Make button rows wrap instead of forcing overflow */
+    .controls,
+    .playerZone .zoneHeader > div{
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+    .controls .btn,
+    .playerZone .zoneHeader .btn{
+      max-width: 100%;
+    }
   }
 
   .brand{
