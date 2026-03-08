@@ -565,28 +565,37 @@
       position: absolute;
       left: 12px;
       top: 8px;
-      right: 140px; /* leave room for Place bet button on the right */
+      right: 120px; /* leave room for Place bet button on the right, but keep enough width for the title */
 
       display: flex;
       align-items: flex-start;
       gap: 10px;
 
       min-width: 0;
-      padding-right: 0; /* cancel the 160px reserve used by the absolute desktop-style controls */
+      padding-right: 0;
     }
 
     /* Push title + instruction text to the right so it doesn't sit on top of the frog */
     .brand > div{
-      padding-left: 44px;
+      padding-left: 54px;
       display: block;
+      min-width: 0;
     }
-    .brand .title{ font-size: 16px; line-height: 1.05; }
+
+    /* Keep "Pai Gow" on ONE line (no Pai / Gow wrap) */
+    .brand .title{
+      font-size: 16px;
+      line-height: 1.05;
+      white-space: nowrap;
+    }
+
+    /* Paragraph-style wrap under the title (like your close-up) */
     .brand .sub{
       margin-top: 2px;
       font-size: 12px;
       opacity: 0.78;
       white-space: normal;
-      max-width: 230px; /* paragraph-style wrap like screenshot */
+      max-width: 250px;
       line-height: 1.15;
     }
 
