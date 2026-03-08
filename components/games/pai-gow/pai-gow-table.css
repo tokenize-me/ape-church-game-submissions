@@ -539,6 +539,7 @@
 
   /* Mobile: always use the OLD header art (Telegram iPhone). */
   @media (max-width: 520px){
+    :root{ --cardW: 48px; --cardH: 66px; } /* iPhone baseline (matches the "good" sizing) */
     html, body{ overflow-x: hidden; }
 
     .rail{
