@@ -53,9 +53,18 @@ export default function PaiGowTemplateShell() {
       const tableWrap = gameEl.querySelector<HTMLElement>(".tableWrap");
       if (!tableWrap) return;
 
-      // scrollHeight includes all table content; add a little breathing room for the audio buttons.
-      const contentH = Math.ceil(tableWrap.scrollHeight);
-      const target = Math.min(1900, Math.max(1200, contentH + 90));
+      // Prefer the visual bottom of the BETS/chips area (what you care about),
+      // not the full scrollHeight (which can include extra empty fill space).
+      const anchor =
+        gameEl.querySelector<HTMLElement>(".betFooterRow") ??
+        gameEl.querySelector<HTMLElement>(".chipRack") ??
+        gameEl.querySelector<HTMLElement>(".betLane");
+
+      const wrapTop = tableWrap.getBoundingClientRect().top;
+      const anchorBottom = anchor ? Math.ceil(anchor.getBoundingClientRect().bottom - wrapTop) : Math.ceil(tableWrap.scrollHeight);
+
+      // Add a little breathing room for the audio buttons and rounded border.
+      const target = Math.min(1750, Math.max(1100, anchorBottom + 110));
       setMobileGwHeight(`${target}px`);
     };
 
