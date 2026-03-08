@@ -609,6 +609,9 @@
       box-sizing: border-box;
     }
 
+    /* Match dealer card size to the (already-shrunk) player row on iPhone */
+    .dealerZone{ --cardW: 35px; }
+
     /* Critical: flex children must be allowed to shrink (prevents right-edge clipping in iOS/TG) */
     .brand,
     .controls,
