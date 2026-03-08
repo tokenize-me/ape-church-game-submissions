@@ -544,9 +544,10 @@
     .rail{
       /* iPhone: use the OLD header art and FIT it (no cropping) */
       background-image: url('/submissions/pai-gow/header-bg-mobile.jpg') !important;
-      background-size: contain !important;
+      /* Fill the header width (no side letterboxing). */
+      background-size: cover !important;
       background-repeat: no-repeat !important;
-      background-position: 50% 50% !important;
+      background-position: 45% 50% !important;
       background-color: rgba(0,0,0,0.10);
       min-height: 210px;
 

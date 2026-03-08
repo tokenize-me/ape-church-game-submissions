@@ -65,7 +65,7 @@ export default function PaiGowTemplateShell() {
       const scrollH = Math.ceil(tableWrap.scrollHeight);
 
       const scrollerPad = 64; // matches pgMobileScroller paddingBottom
-      const chromePad = 18; // minimal breathing room so the border clears the volume buttons
+      const chromePad = 6; // minimal breathing room so the border clears the volume buttons
 
       // Keep a single scroll (no inner scrollbar): never undershoot the actual scrollHeight.
       // But also keep the window tight to the chip rack so we don't leave a big dead zone.
