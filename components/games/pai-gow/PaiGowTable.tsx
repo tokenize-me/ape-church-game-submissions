@@ -1018,7 +1018,7 @@ const PaiGowTable = forwardRef<PaiGowTableHandle, PaiGowTableProps>(function Pai
             disabled={betsLocked || (!mainChips.length && !sideChips.length && !pushChips.length)}
             title={betsLocked ? "Bets are locked" : "Remove all bets"}
           >
-            Clear
+            Clear bets
           </button>
         </div>
 
