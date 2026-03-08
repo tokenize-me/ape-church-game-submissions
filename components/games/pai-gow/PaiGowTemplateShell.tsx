@@ -61,10 +61,12 @@ export default function PaiGowTemplateShell() {
         gameEl.querySelector<HTMLElement>(".betLane");
 
       const wrapTop = tableWrap.getBoundingClientRect().top;
-      const anchorBottom = anchor ? Math.ceil(anchor.getBoundingClientRect().bottom - wrapTop) : Math.ceil(tableWrap.scrollHeight);
+      const anchorBottom = anchor ? Math.ceil(anchor.getBoundingClientRect().bottom - wrapTop) : 0;
+      const scrollH = Math.ceil(tableWrap.scrollHeight);
 
       // Add a little breathing room for the audio buttons and rounded border.
-      const target = Math.min(1750, Math.max(1100, anchorBottom + 70));
+      // Also ensure we never undershoot the actual scrollHeight (prevents the inner scrollbar).
+      const target = Math.min(1750, Math.max(1100, Math.max(anchorBottom + 70, scrollH + 24)));
       setMobileGwHeight(`${target}px`);
     };
 
