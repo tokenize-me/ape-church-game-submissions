@@ -584,7 +584,6 @@
 
     /* Prevent any horizontal drift */
     .tableWrap,
-    .table,
     .pgLayout,
     .rail,
     .felt,
@@ -597,6 +596,14 @@
       max-width: 100%;
       box-sizing: border-box;
       overflow-x: hidden;
+    }
+
+    /* Force the inner table itself to obey the wrapper width (it was expanding to content width) */
+    .table{
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: hidden;
+      box-sizing: border-box;
     }
 
     /* Critical: flex children must be allowed to shrink (prevents right-edge clipping in iOS/TG) */
