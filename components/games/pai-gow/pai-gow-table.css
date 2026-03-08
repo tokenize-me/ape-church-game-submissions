@@ -600,6 +600,7 @@
 
     .brand .subStep{
       display: block;
+      white-space: nowrap; /* keep "dealer flips →" on one line */
     }
 
     .controls{
