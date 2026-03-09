@@ -1356,8 +1356,14 @@ const PaiGowTable = forwardRef<PaiGowTableHandle, PaiGowTableProps>(function Pai
                     <div style={{ display: "grid", gap: 6 }}>
                       <div>Outcome: <strong>{view.res.outcome}</strong></div>
                       <div>Main payout: <strong>{mainPayout}</strong></div>
-                      <div>Bonus payout: <strong>{bonusPayout}</strong></div>
-                      <div>Push payout: <strong>{pushPayout}</strong></div>
+                      <div>
+                        Bonus payout: <strong>{bonusPayout}</strong>
+                        {view.res.sideHit ? <span style={{ opacity: 0.92 }}> (x{view.res.sideHit.multiplier})</span> : null}
+                      </div>
+                      <div>
+                        Push payout: <strong>{pushPayout}</strong>
+                        {view.res.pushAceHighHit ? <span style={{ opacity: 0.92 }}> (x{view.res.pushAceHighHit.multiplier})</span> : null}
+                      </div>
                       <div>Net payout: <strong>{netPayout}</strong></div>
                     </div>
                   ) : (
@@ -1398,8 +1404,14 @@ const PaiGowTable = forwardRef<PaiGowTableHandle, PaiGowTableProps>(function Pai
                     <div style={{ display: "grid", gap: 6 }}>
                       <div>Outcome: <strong>{view.res.outcome}</strong></div>
                       <div>Main payout: <strong>{mainPayout}</strong></div>
-                      <div>Bonus payout: <strong>{bonusPayout}</strong></div>
-                      <div>Push payout: <strong>{pushPayout}</strong></div>
+                      <div>
+                        Bonus payout: <strong>{bonusPayout}</strong>
+                        {view.res.sideHit ? <span style={{ opacity: 0.92 }}> (x{view.res.sideHit.multiplier})</span> : null}
+                      </div>
+                      <div>
+                        Push payout: <strong>{pushPayout}</strong>
+                        {view.res.pushAceHighHit ? <span style={{ opacity: 0.92 }}> (x{view.res.pushAceHighHit.multiplier})</span> : null}
+                      </div>
                       <div>Net payout: <strong>{netPayout}</strong></div>
                     </div>
                   ) : (
