@@ -178,11 +178,16 @@ export default function PaiGowTemplateShell() {
       const chromePad = 4; // minimal breathing room so the border clears the volume buttons
 
       // Prefer anchoring to the chip rack bottom; scrollHeight can include extra "fill" space.
-      // Only fall back to scrollHeight if we couldn't find an anchor.
       const anchorTarget = anchorBottom > 0 ? anchorBottom + scrollerPad + chromePad : 0;
-      const fallbackTarget = scrollH + scrollerPad + 2;
+      const scrollTarget = scrollH + scrollerPad + 2;
 
-      const target = Math.min(1900, Math.max(1100, anchorTarget || fallbackTarget));
+      // If scrollHeight is much larger than the anchor, it's usually just layout fill.
+      // In that case, trust the anchor to avoid a huge empty block.
+      const fillSlack = 140;
+      const useScroll = !anchorTarget || scrollH <= anchorBottom + fillSlack;
+
+      const raw = useScroll ? Math.max(anchorTarget, scrollTarget) : anchorTarget;
+      const target = Math.min(1900, Math.max(1100, raw));
       setMobileGwHeight(`${target}px`);
     };
 
