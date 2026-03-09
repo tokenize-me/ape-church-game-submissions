@@ -1,7 +1,5 @@
 'use client';
 
-/* eslint-disable react-hooks/set-state-in-effect */
-
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import Image from 'next/image';
 import { CircleDollarSign, Wallet } from 'lucide-react';
@@ -48,7 +46,7 @@ export const BetAmountInput: React.FC<CompactAmountInputProps> = ({
         if (parseFloat(inputValue) !== value) {
             setInputValue(String(value));
         }
-    }, [value, inputValue]);
+    }, [value]);
 
     useEffect(() => {
         if (disabled) {
