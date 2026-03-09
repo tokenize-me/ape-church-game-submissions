@@ -858,24 +858,33 @@ const PaiGowTable = forwardRef<PaiGowTableHandle, PaiGowTableProps>(function Pai
             style={{ cursor: betsLocked ? "not-allowed" : "pointer" }}
           >
             <div className="chipStack" aria-hidden>
-              {sideChips.slice(0, 18).map((v, i) => {
-                const w = wobbleStyle(v, i);
-                const step = 3;
-                const capped = Math.min(i, 14);
-                return (
-                  <div
-                    key={`side-${i}`}
-                    className={`stackChip chipV${v}`}
-                    style={{
-                      bottom: capped * step,
-                      left: `${w.x}px`,
-                      transform: `rotate(${w.rot}deg) translateZ(0)`,
-                    }}
-                  >
-                    {v}
-                  </div>
-                );
-              })}
+              {(() => {
+                const maxShow = 12;
+                const extra = sideChips.length - maxShow;
+                const base = sideChips.slice(0, Math.min(sideChips.length, maxShow));
+                const display = extra > 0 ? base.slice(0, maxShow - 1).concat([base[maxShow - 1]]) : base;
+
+                return display.map((v, i) => {
+                  const w = wobbleStyle(v, i);
+                  const step = 3;
+                  const capped = Math.min(i, maxShow - 1);
+                  const label = extra > 0 && i === maxShow - 1 ? `+${extra}` : `${v}`;
+
+                  return (
+                    <div
+                      key={`side-${i}`}
+                      className={`stackChip chipV${v}`}
+                      style={{
+                        bottom: capped * step,
+                        left: `${w.x}px`,
+                        transform: `rotate(${w.rot}deg) translateZ(0)`,
+                      }}
+                    >
+                      {label}
+                    </div>
+                  );
+                });
+              })()}
             </div>
 
             {sideChips.length ? (
@@ -918,24 +927,33 @@ const PaiGowTable = forwardRef<PaiGowTableHandle, PaiGowTableProps>(function Pai
             style={{ cursor: betsLocked ? "not-allowed" : "pointer" }}
           >
             <div className="chipStack" aria-hidden>
-              {pushChips.slice(0, 18).map((v, i) => {
-                const w = wobbleStyle(v, i);
-                const step = 3;
-                const capped = Math.min(i, 14);
-                return (
-                  <div
-                    key={`push-${i}`}
-                    className={`stackChip chipV${v}`}
-                    style={{
-                      bottom: capped * step,
-                      left: `${w.x}px`,
-                      transform: `rotate(${w.rot}deg) translateZ(0)`,
-                    }}
-                  >
-                    {v}
-                  </div>
-                );
-              })}
+              {(() => {
+                const maxShow = 12;
+                const extra = pushChips.length - maxShow;
+                const base = pushChips.slice(0, Math.min(pushChips.length, maxShow));
+                const display = extra > 0 ? base.slice(0, maxShow - 1).concat([base[maxShow - 1]]) : base;
+
+                return display.map((v, i) => {
+                  const w = wobbleStyle(v, i);
+                  const step = 3;
+                  const capped = Math.min(i, maxShow - 1);
+                  const label = extra > 0 && i === maxShow - 1 ? `+${extra}` : `${v}`;
+
+                  return (
+                    <div
+                      key={`push-${i}`}
+                      className={`stackChip chipV${v}`}
+                      style={{
+                        bottom: capped * step,
+                        left: `${w.x}px`,
+                        transform: `rotate(${w.rot}deg) translateZ(0)`,
+                      }}
+                    >
+                      {label}
+                    </div>
+                  );
+                });
+              })()}
             </div>
 
             {pushChips.length ? (
@@ -978,24 +996,33 @@ const PaiGowTable = forwardRef<PaiGowTableHandle, PaiGowTableProps>(function Pai
             style={{ cursor: betsLocked ? "not-allowed" : "pointer" }}
           >
             <div className="chipStack" aria-hidden>
-              {mainChips.slice(0, 18).map((v, i) => {
-                const w = wobbleStyle(v, i);
-                const step = 3;
-                const capped = Math.min(i, 14);
-                return (
-                  <div
-                    key={`main-${i}`}
-                    className={`stackChip chipV${v}`}
-                    style={{
-                      bottom: capped * step,
-                      left: `${w.x}px`,
-                      transform: `rotate(${w.rot}deg) translateZ(0)`,
-                    }}
-                  >
-                    {v}
-                  </div>
-                );
-              })}
+              {(() => {
+                const maxShow = 12;
+                const extra = mainChips.length - maxShow;
+                const base = mainChips.slice(0, Math.min(mainChips.length, maxShow));
+                const display = extra > 0 ? base.slice(0, maxShow - 1).concat([base[maxShow - 1]]) : base;
+
+                return display.map((v, i) => {
+                  const w = wobbleStyle(v, i);
+                  const step = 3;
+                  const capped = Math.min(i, maxShow - 1);
+                  const label = extra > 0 && i === maxShow - 1 ? `+${extra}` : `${v}`;
+
+                  return (
+                    <div
+                      key={`main-${i}`}
+                      className={`stackChip chipV${v}`}
+                      style={{
+                        bottom: capped * step,
+                        left: `${w.x}px`,
+                        transform: `rotate(${w.rot}deg) translateZ(0)`,
+                      }}
+                    >
+                      {label}
+                    </div>
+                  );
+                });
+              })()}
             </div>
 
             {mainChips.length ? (
