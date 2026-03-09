@@ -126,10 +126,15 @@ const GameWindow: React.FC<GameWindowProps> = ({
 
     return (
         <div
+            data-gw-mobile-height={customHeightMobile ? "true" : "false"}
             className={cn(
                 "lg:basis-2/3 w-full rounded-[12px] border-[2.25px] sm:border-[3.75px] lg:border-[4.68px] border-[#2A3640] relative overflow-hidden",
             )}
+            style={customHeightMobile ? ({ ["--gwMobileMinH" as any]: customHeightMobile } as React.CSSProperties) : undefined}
         >
+            {customHeightMobile ? (
+                <style>{`@media (max-width: 640px){ [data-gw-mobile-height=\"true\"]{ min-height: var(--gwMobileMinH); } }`}</style>
+            ) : null}
 
             {isGamePaused && (
                 <div className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-2 bg-[#12181C]/75 backdrop-blur-xs rounded-[8px] font-roboto p-4">
@@ -191,9 +196,6 @@ const GameWindow: React.FC<GameWindowProps> = ({
                     width={719}
                     height={719}
                     className="w-full h-full object-cover rounded-[8px] opacity-75"
-                    style={{
-                        minHeight: customHeightMobile ? customHeightMobile : "100%",
-                    }}
                     priority
                 />
             )}
