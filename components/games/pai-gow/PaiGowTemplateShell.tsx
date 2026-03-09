@@ -160,7 +160,14 @@ export default function PaiGowTemplateShell() {
                     width: "100%",
                   }}
                 >
-                  <div style={{ fontWeight: 950, letterSpacing: 2.2, opacity: 0.85, fontSize: 14 }}>
+                  <div
+                    style={{
+                      fontWeight: 950,
+                      letterSpacing: 2.2,
+                      opacity: 0.88,
+                      fontSize: "clamp(16px, 2.0vw, 20px)",
+                    }}
+                  >
                     BREAKDOWN
                   </div>
 
@@ -201,18 +208,27 @@ export default function PaiGowTemplateShell() {
                             alignItems: "center",
                             padding: "14px 14px",
                             borderTop: idx === 0 ? "0" : "1px solid rgba(255,255,255,0.08)",
-                            fontSize: 14,
+                            fontSize: "clamp(16px, 1.9vw, 19px)",
                           }}
                         >
-                          <div style={{ fontWeight: 900, opacity: 0.92 }}>{row.k}</div>
-                          <div style={{ fontWeight: 950, opacity: 0.90, minWidth: 64, textAlign: "right" }}>
+                          <div style={{ fontWeight: 950, opacity: 0.94 }}>{row.k}</div>
+                          <div
+                            style={{
+                              fontWeight: 1000,
+                              opacity: 0.92,
+                              minWidth: 72,
+                              textAlign: "right",
+                              fontVariantNumeric: "tabular-nums",
+                            }}
+                          >
                             {format(row.w)}
                           </div>
                           <div
                             style={{
-                              fontWeight: 950,
-                              minWidth: 64,
+                              fontWeight: 1000,
+                              minWidth: 72,
                               textAlign: "right",
+                              fontVariantNumeric: "tabular-nums",
                               color: isNet ? "rgba(140,255,0,0.98)" : payColor,
                             }}
                           >
@@ -222,7 +238,15 @@ export default function PaiGowTemplateShell() {
                       );
                     })}
 
-                    <div style={{ padding: "12px 14px", borderTop: "1px solid rgba(255,255,255,0.08)", fontSize: 13, opacity: 0.85 }}>
+                    <div
+                      style={{
+                        padding: "12px 14px",
+                        borderTop: "1px solid rgba(255,255,255,0.08)",
+                        fontSize: "clamp(14px, 1.6vw, 17px)",
+                        opacity: 0.9,
+                        lineHeight: 1.3,
+                      }}
+                    >
                       Outcome: <strong style={{ opacity: 0.98 }}>{breakdown.outcome ?? "—"}</strong>
                       {breakdown.dealerAceHighPaiGow ? " • Dealer Ace High Pai Gow" : ""}
                       {breakdown.bonus.hit ? (
