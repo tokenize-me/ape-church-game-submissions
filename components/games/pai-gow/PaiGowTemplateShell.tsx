@@ -137,15 +137,62 @@ export default function PaiGowTemplateShell() {
     // Push/tie -> no stinger.
   }, [showResults, payout, betAmount, audioArmed, muteSfx]);
 
-  // Mobile: avoid nested scrolling by letting the page be the only vertical scroller.
-  // We keep GameWindow at natural height on mobile (no forced inner scrolling).
-  const [isMobile, setIsMobile] = useState(false);
+  // Mobile: dynamically size the GameWindow so it fits the content (avoid big empty space / double scroll).
+  const [mobileGwHeight, setMobileGwHeight] = useState<string>("1700px");
   useEffect(() => {
-    const apply = () => setIsMobile(typeof window !== "undefined" && window.innerWidth <= 640);
+    const gameEl = gameWrapRef.current;
+    if (!gameEl) return;
+
+    const apply = () => {
+      if (typeof window === "undefined") return;
+      if (window.innerWidth > 640) return; // mobile-only
+
+      const tableWrap = gameEl.querySelector<HTMLElement>(".tableWrap");
+      if (!tableWrap) return;
+
+      const anchor =
+        gameEl.querySelector<HTMLElement>(".betFooterRow") ??
+        gameEl.querySelector<HTMLElement>(".chipRack") ??
+        gameEl.querySelector<HTMLElement>(".betLane");
+
+      let anchorBottom = 0;
+      if (anchor) {
+        let y = 0;
+        let el: HTMLElement | null = anchor;
+        while (el && el !== tableWrap) {
+          y += el.offsetTop;
+          el = el.offsetParent as HTMLElement | null;
+        }
+        if (el !== tableWrap) y = anchor.offsetTop;
+        anchorBottom = Math.ceil(y + anchor.offsetHeight);
+      }
+
+      const scrollH = Math.ceil(tableWrap.scrollHeight);
+
+      const scrollerPad = 44;
+      const chromePad = 4;
+
+      const anchorTarget = anchorBottom > 0 ? anchorBottom + scrollerPad + chromePad : 0;
+      const scrollTarget = scrollH + scrollerPad + 2;
+
+      const fillSlack = 140;
+      const useScroll = !anchorTarget || scrollH <= anchorBottom + fillSlack;
+
+      const raw = useScroll ? Math.max(anchorTarget, scrollTarget) : anchorTarget;
+      const target = Math.min(1900, Math.max(1100, raw));
+      setMobileGwHeight(`${target}px`);
+    };
+
     apply();
+    const ro = new ResizeObserver(() => apply());
+    ro.observe(gameEl);
     window.addEventListener("resize", apply);
-    return () => window.removeEventListener("resize", apply);
-  }, []);
+
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", apply);
+    };
+  }, [status?.isGameFinished, status?.betAmount, status?.payout]);
 
   const format = (n: number | undefined) => (Number.isFinite(n as number) ? String(n) : "0");
 
@@ -203,14 +250,7 @@ betAmount={betAmount}
             resultModalDelayMs={900}
           >
             {/* GameWindow renders a background image; mount Pai Gow UI as an overlay on top of it. */}
-            <div
-              className="pgMobileScroller"
-              style={
-                isMobile
-                  ? ({ position: "relative", zIndex: 10, overflow: "visible", paddingBottom: 44 } as React.CSSProperties)
-                  : ({ position: "absolute", inset: 0, zIndex: 10, overflow: "hidden", paddingBottom: 44 } as React.CSSProperties)
-              }
-            >
+            <div className="pgMobileScroller" style={{ position: "absolute", inset: 0, zIndex: 10, overflow: "hidden", paddingBottom: 44 }}>
               <PaiGowTable
                 ref={tableRef}
                 onStatusChange={onStatusChange}
