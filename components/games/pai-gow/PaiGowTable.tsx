@@ -859,7 +859,7 @@ const PaiGowTable = forwardRef<PaiGowTableHandle, PaiGowTableProps>(function Pai
           >
             <div className="chipStack" aria-hidden>
               {(() => {
-                const maxShow = 12;
+                const maxShow = 9;
                 const extra = sideChips.length - maxShow;
                 const base = sideChips.slice(0, Math.min(sideChips.length, maxShow));
                 const display = extra > 0 ? base.slice(0, maxShow - 1).concat([base[maxShow - 1]]) : base;
@@ -928,7 +928,7 @@ const PaiGowTable = forwardRef<PaiGowTableHandle, PaiGowTableProps>(function Pai
           >
             <div className="chipStack" aria-hidden>
               {(() => {
-                const maxShow = 12;
+                const maxShow = 9;
                 const extra = pushChips.length - maxShow;
                 const base = pushChips.slice(0, Math.min(pushChips.length, maxShow));
                 const display = extra > 0 ? base.slice(0, maxShow - 1).concat([base[maxShow - 1]]) : base;
@@ -997,7 +997,7 @@ const PaiGowTable = forwardRef<PaiGowTableHandle, PaiGowTableProps>(function Pai
           >
             <div className="chipStack" aria-hidden>
               {(() => {
-                const maxShow = 12;
+                const maxShow = 9;
                 const extra = mainChips.length - maxShow;
                 const base = mainChips.slice(0, Math.min(mainChips.length, maxShow));
                 const display = extra > 0 ? base.slice(0, maxShow - 1).concat([base[maxShow - 1]]) : base;
