@@ -54,24 +54,26 @@ jobs:
             echo "✓ components/games/$GAME/ exists and is non-empty"
           fi
 
-          # public/[game]/card.png
-          if [ ! -f "public/$GAME/card.png" ]; then
-            echo "::error::MISSING: public/$GAME/card.png"
+          # public/submissions/[game]/card.(png|jpg|webp)
+          CARD_FILE=$(find "public/submissions/$GAME" -maxdepth 1 -name 'card.png' -o -name 'card.jpg' -o -name 'card.webp' 2>/dev/null | head -1)
+          if [ -z "$CARD_FILE" ]; then
+            echo "::error::MISSING: public/submissions/$GAME/card.{png,jpg,webp}"
             FAIL=1
           else
-            echo "✓ public/$GAME/card.png"
+            echo "✓ $CARD_FILE"
           fi
 
-          # public/[game]/banner.png
-          if [ ! -f "public/$GAME/banner.png" ]; then
-            echo "::error::MISSING: public/$GAME/banner.png"
+          # public/submissions/[game]/banner.(png|jpg|webp)
+          BANNER_FILE=$(find "public/submissions/$GAME" -maxdepth 1 -name 'banner.png' -o -name 'banner.jpg' -o -name 'banner.webp' 2>/dev/null | head -1)
+          if [ -z "$BANNER_FILE" ]; then
+            echo "::error::MISSING: public/submissions/$GAME/banner.{png,jpg,webp}"
             FAIL=1
           else
-            echo "✓ public/$GAME/banner.png"
+            echo "✓ $BANNER_FILE"
           fi
 
           # submissions/[partner]/[game]/metadata.json
-          METADATA=$(find submissions -path "*/\$GAME/metadata.json" 2>/dev/null | head -1)
+          METADATA=$(find submissions -path "*/$GAME/metadata.json" 2>/dev/null | head -1)
           if [ -z "$METADATA" ]; then
             echo "::error::MISSING: submissions/*/$GAME/metadata.json"
             FAIL=1
@@ -131,25 +133,29 @@ jobs:
             echo "✓ approvedAt is not set (correct for new submissions)"
           fi
 
-          # thumbnail must equal /[gameName]/card.png
+          # thumbnail must equal /[gameName]/card.(png|jpg|webp)
           THUMB=$(jq -r '.thumbnail // empty' "$METADATA")
-          EXPECTED_THUMB="/$GAME/card.png"
-          if [ "$THUMB" != "$EXPECTED_THUMB" ]; then
-            echo "::error::thumbnail must be \"$EXPECTED_THUMB\" but got \"$THUMB\""
-            FAIL=1
-          else
-            echo "✓ thumbnail = $THUMB"
-          fi
+          case "$THUMB" in
+            /$GAME/card.png|/$GAME/card.jpg|/$GAME/card.webp)
+              echo "✓ thumbnail = $THUMB"
+              ;;
+            *)
+              echo "::error::thumbnail must be \"/$GAME/card.{png,jpg,webp}\" but got \"$THUMB\""
+              FAIL=1
+              ;;
+          esac
 
-          # banner must equal /[gameName]/banner.png
+          # banner must equal /[gameName]/banner.(png|jpg|webp)
           BANNER=$(jq -r '.banner // empty' "$METADATA")
-          EXPECTED_BANNER="/$GAME/banner.png"
-          if [ "$BANNER" != "$EXPECTED_BANNER" ]; then
-            echo "::error::banner must be \"$EXPECTED_BANNER\" but got \"$BANNER\""
-            FAIL=1
-          else
-            echo "✓ banner = $BANNER"
-          fi
+          case "$BANNER" in
+            /$GAME/banner.png|/$GAME/banner.jpg|/$GAME/banner.webp)
+              echo "✓ banner = $BANNER"
+              ;;
+            *)
+              echo "::error::banner must be \"/$GAME/banner.{png,jpg,webp}\" but got \"$BANNER\""
+              FAIL=1
+              ;;
+          esac
 
           # gameName must match detected folder name
           META_GAME=$(jq -r '.gameName // empty' "$METADATA")
@@ -260,21 +266,21 @@ jobs:
             echo "✓ No WAV files"
           fi
 
-          # Large PNGs over 1 MB — warn only
-          LARGE_PNGS=""
-          for f in $(echo "$CHANGED" | grep -i '\.png$' || true); do
+          # Large images over 1 MB — warn only
+          LARGE_IMGS=""
+          for f in $(echo "$CHANGED" | grep -iE '\.(png|jpg|jpeg|webp)$' || true); do
             if [ -f "$f" ]; then
               SIZE=$(stat -c%s "$f" 2>/dev/null || stat -f%z "$f" 2>/dev/null || echo 0)
               if [ "$SIZE" -gt 1048576 ]; then
-                LARGE_PNGS="$LARGE_PNGS\n  · $f ($(( SIZE / 1024 )) KB)"
+                LARGE_IMGS="$LARGE_IMGS\n  · $f ($(( SIZE / 1024 )) KB)"
               fi
             fi
           done
-          if [ -n "$LARGE_PNGS" ]; then
-            echo "::warning::Large PNG files detected (>1 MB). Consider compressing them:"
-            echo -e "$LARGE_PNGS"
+          if [ -n "$LARGE_IMGS" ]; then
+            echo "::warning::Large image files detected (>1 MB). Consider compressing or converting to WebP:"
+            echo -e "$LARGE_IMGS"
           else
-            echo "✓ No oversized PNGs"
+            echo "✓ No oversized images"
           fi
 
           if [ "$FAIL" -eq 1 ]; then exit 1; fi

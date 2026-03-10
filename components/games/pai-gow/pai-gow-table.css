@@ -1,0 +1,1269 @@
+:root{
+  --felt: radial-gradient(1200px 700px at 18% 0%, rgba(140,255,0,0.10), transparent 60%),
+          radial-gradient(900px 600px at 82% 20%, rgba(105,174,251,0.10), transparent 55%),
+          radial-gradient(900px 700px at 50% 120%, rgba(239,185,11,0.08), transparent 55%),
+          #050505;
+
+  /* responsive tokens */
+  --cardW: 72px;
+  --cardH: 100px;
+}
+
+.tableWrap{
+  /* When embedded in the template GameWindow, let the parent background show through. */
+  min-height: 100%;
+  height: 100%;
+  background: transparent;
+  color: var(--text);
+}
+
+/* Mobile: no inner scroll. We make the GameWindow taller on mobile instead. */
+
+.pgLayout{
+  display: block;
+  height: 100%;
+}
+
+/* Desktop: fill the GameWindow like other Ape.church games (game left, betting sidebar right) */
+@media (min-width: 700px){
+  /* Desktop: smaller cards so split + result always fit in the fixed GameWindow square */
+  :root{ --cardW: 56px; --cardH: 78px; }
+
+  /* Desktop: make DEALER / PLAYER labels big + readable (like last night). */
+  .zoneLabel{
+    font-weight: 1000;
+    letter-spacing: 1.4px;
+    font-size: 20px;
+    opacity: 1;
+    color: rgba(255,255,255,0.98);
+    text-shadow: 0 2px 0 rgba(0,0,0,0.70);
+  }
+
+  /* Reserve status line height so the header doesn't reflow when text changes. */
+  .dealerStatus{ min-height: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* Prevent vertical growth from card wrapping on desktop (wrapping causes the table to "drop") */
+  .cardsRow{ flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
+  .cardsRowScroll{ flex-wrap: nowrap; overflow-x: auto; }
+
+  /* In flex-column zones, prevent card rows from shrinking and getting clipped */
+  .dealerZone .cardsRowScroll,
+  .playerZone .cardsRowScroll{
+    flex: 0 0 auto;
+    min-height: calc(var(--cardH) + 14px);
+    padding-bottom: 6px;
+    box-sizing: border-box;
+  }
+
+  /* Keep zones from forcing the felt taller than the GameWindow square */
+  .felt{ min-height: 0; display:flex; flex-direction: column; }
+  .dealerZone{ flex: 0 0 38%; min-height: 0; }
+  .playerZone{ flex: 1 1 62%; min-height: 0; overflow-y: auto; overflow-x: hidden; }
+
+  /* Fill the GameWindow on desktop like other Ape.church games */
+  .table{ max-width: 100%; width: 100%; padding: 14px; }
+  .pgLayout{
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 14px;
+    align-items: start;
+  }
+
+  /* Main playfield on the LEFT: fill the GameWindow height (no forced square) */
+  .felt{
+    grid-column: 1;
+    margin-top: 0;
+
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  /* Sidebar on the RIGHT: separate vertical rectangle (image on top, bets below) */
+  /* Right panel: ONE bordered vertical rectangle (banner stacked on top of bets/chips) */
+  .pgSidebar{
+    grid-column: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    border-radius: 22px;
+    border: 1px solid rgba(215,225,230,0.12);
+    background: rgba(0,0,0,0.35);
+    box-shadow: 0 18px 60px rgba(0,0,0,0.55);
+  }
+
+  .rail{
+    margin-top: 0;
+    flex: 0 0 38%;
+    min-height: 220px;
+    background-position: 55% 46%;
+
+    /* Sidebar box provides the border/radius */
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .betZone{
+    margin-top: 0;
+
+    /* Sidebar box provides the border/radius */
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+
+    flex: 1 1 auto;
+    min-height: 0;
+    background: transparent;
+
+    /* Keep chip rack visible inside the pinned sidebar height */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .betZone .zoneHeader{ flex: 0 0 auto; }
+  /* Allow chip stacks to render above the bet spots without being clipped.
+     We already reserve headroom via padding-top on .betLane. */
+  .betZone .betLane{ flex: 1 1 auto; overflow: visible; padding-bottom: 8px; }
+  .betZone .betFooterRow{
+    flex: 0 0 auto;
+    padding-top: 6px;
+  }
+
+  .controls .btn{
+    padding: 12px 18px;
+    font-size: 15px;
+    border-radius: 14px;
+  }
+
+  .betLane{
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: stretch;
+    padding-top: 54px; /* reserve headroom so chip stacks can rise without colliding with BETS header */
+  }
+
+  .betSpot,
+  .betSpotMain,
+  .betSpotBonus,
+  .betSpotPush{
+    width: 100% !important;
+    height: 86px;
+  }
+
+  .betSpotMain{ height: 96px; }
+
+  /* Sidebar chip rack: tighten so all chips fit within the pinned sidebar height */
+  .chipRack{ gap: 6px; padding-top: 4px; }
+  .chip{ width: 44px; height: 44px; }
+}
+
+
+
+.table{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 8px 8px 10px;
+}
+
+.felt{
+  margin-top: 14px;
+  border-radius: 22px;
+  border: 1px solid rgba(215,225,230,0.12);
+  /* keep it readable, but let more of the GameWindow background show */
+  background: rgba(0,0,0,0.35);
+  box-shadow: 0 18px 60px rgba(0,0,0,0.55);
+  overflow: hidden;
+}
+
+.rail{
+  position: relative;
+  overflow: hidden;
+  padding: 18px 16px;
+  min-height: 280px; /* enough height to show the full header art (desktop) */
+
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  column-gap: 12px;
+  row-gap: 10px;
+  align-items: start;
+
+  border-radius: 22px;
+  border: 1px solid rgba(215,225,230,0.12);
+  box-shadow: 0 18px 60px rgba(0,0,0,0.55);
+
+  background-image: url('/submissions/pai-gow/header-bg.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 65% 42%;
+  background-color: rgba(0,0,0,0.10);
+}
+
+.rail::before{ content: none; }
+
+.rail > *{ position: relative; z-index: 1; }
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap: 12px;
+}
+
+.title{
+  font-weight: 900;
+  letter-spacing: 0.2px;
+}
+
+.sub{
+  font-size: 12px;
+  opacity: 0.72;
+}
+
+.zones{
+  display:grid;
+  grid-template-rows: auto auto auto;
+}
+
+.zone{
+  padding: 16px;
+  background: #000;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Desktop: let dealer/player art hit the rounded felt edges (no inner letterbox padding). */
+@media (min-width: 700px){
+  /* Reduce inset so the table content reaches the felt edges (match template framing). */
+  .dealerZone,
+  .playerZone{ padding: 4px; }
+
+  .zoneHeader{ margin-bottom: 6px; }
+
+  /* Reduce right-side breathing room so rows visually touch the side rails. */
+  .cardsRowScroll{ padding-right: 0; }
+}
+
+/* Add subtle art back into dealer/player zones (provided assets) */
+.dealerZone{
+  background-image: url('/submissions/pai-gow/dealer-zone-bg.jpg');
+  background-size: cover;
+  background-position: 50% 40%;
+  background-repeat: no-repeat;
+  background-color: rgba(0,0,0,0.35);
+}
+
+.playerZone{
+  background-image: url('/submissions/pai-gow/player-zone-bg.jpg');
+  background-size: cover;
+  background-position: 50% 35%;
+  background-repeat: no-repeat;
+  background-color: rgba(0,0,0,0.35);
+}
+
+
+/* Desktop: give BETS its own bordered panel like RESULT */
+.betZone{
+  margin-top: 14px;
+  border-radius: 22px;
+  border: 1px solid rgba(215,225,230,0.12);
+  background: rgba(0,0,0,0.35);
+  box-shadow: 0 18px 60px rgba(0,0,0,0.55);
+}
+
+.zone + .zone{
+  border-top: 1px solid rgba(215,225,230,0.08);
+}
+
+.zoneHeader{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.zoneLabel{
+  font-weight: 1000;
+  letter-spacing: 0.9px;
+  font-size: 13px;
+  opacity: 1;
+  color: rgba(255,255,255,0.98);
+  text-shadow: 0 2px 0 rgba(0,0,0,0.70);
+}
+
+.cardsRow{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.betLane{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap: 14px;
+  padding: 12px 10px 6px;
+}
+
+.betSpot{
+  width: 150px;
+  height: 86px;
+  border-radius: 999px;
+  border: 2px solid rgba(215,225,230,0.20);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  background: rgba(0,0,0,0.25);
+  position: relative;
+  /* allow chip stacks to rise above the bet pill on mobile */
+  overflow: visible;
+}
+
+.betSpot .chipStack{
+  /* keep chips behind labels so BONUS + value stay readable */
+  z-index: 1;
+}
+
+.betSpot .betContent{
+  position: relative;
+  z-index: 3;
+}
+
+.betSpot .betBackBtn{
+  z-index: 4;
+}
+
+.betSpotMain{
+  width: 210px;
+  height: 104px;
+  border-color: rgba(140,255,0,0.22);
+}
+
+.betSpotPush{
+  width: 150px;
+  height: 86px;
+  border-color: rgba(239, 185, 11, 0.32);
+  background: rgba(60, 45, 8, 0.22);
+}
+
+.betSpotPush .betName{
+  letter-spacing: 1.5px;
+}
+
+.betSpotPush::after{
+  content: 'Ace High';
+  position: absolute;
+  top: 6px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 9px;
+  line-height: 1;
+  opacity: 0.82;
+  letter-spacing: 1px;
+  font-weight: 900;
+  color: rgba(255,255,255,0.85);
+  text-shadow:
+    0 1px 0 rgba(0,0,0,0.6),
+    0 0 10px rgba(0,0,0,0.55);
+  pointer-events: none;
+}
+
+.betSpotPush .betContent{
+  padding-top: 10px; /* push PUSH label down so it never collides with Ace High */
+}
+
+.betSpotBonus{
+  width: 170px;
+}
+
+.jackpotWrap{ display:none; }
+
+.jackpotPill{
+  display: none;
+  padding: 9px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 70, 70, 0.35);
+  background: rgba(80, 10, 10, 0.30);
+  color: rgba(255,255,255,0.88);
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.jackpotPill:disabled{
+  opacity: 0.85;
+}
+
+.betBackBtn{
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  border: 1px solid rgba(215,225,230,0.22);
+  background: rgba(10,10,10,0.78);
+  color: rgba(240,245,250,0.92);
+  font-weight: 900;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.betSpotBonus .betBackBtn{
+  right: 6px;
+  top: 6px;
+}
+
+.betBackBtn:disabled{
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.betName{
+  font-weight: 950;
+  letter-spacing: 1.1px;
+  font-size: 12px;
+  opacity: 0.98;
+  color: rgba(255,255,255,0.92);
+  text-shadow:
+    0 1px 0 rgba(0,0,0,0.55),
+    0 0 10px rgba(0,0,0,0.55);
+}
+
+.betValue{
+  color: rgba(255,255,255,0.92);
+  text-shadow:
+    0 1px 0 rgba(0,0,0,0.6),
+    0 0 10px rgba(0,0,0,0.55);
+}
+
+/* keep bet text readable even when chip stack is present */
+.betSpot .betContent{
+  padding-left: 68px; /* leaves more room for the chip stack */
+  padding-right: 34px; /* leaves room for the undo button */
+  box-sizing: border-box;
+}
+
+.betSpotBonus .betContent{
+  padding-left: 74px;
+  padding-right: 44px; /* keep BONUS label clear of undo button */
+}
+
+.chipRack{
+  display:flex;
+  gap: 8px;
+  align-items:center;
+  justify-content:flex-start;
+  flex-wrap:wrap;
+  padding: 10px 0 0;
+}
+
+.chip{
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  border: 2px solid rgba(215,225,230,0.22);
+  background: rgba(20,20,20,0.85);
+  color: var(--text);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.chipActive{
+  border-color: var(--ac-green);
+  box-shadow: 0 0 0 2px rgba(140,255,0,0.18);
+}
+
+.controls{
+  display:flex;
+  gap: 10px;
+  align-items:center;
+  justify-content:flex-end;
+  flex-wrap:wrap;
+
+  /* Put controls into the empty banner area on the top-right (like the screenshot callout) */
+  position: absolute;
+  right: 16px;
+  top: 40%;
+  transform: translateY(-50%);
+}
+
+/* Jackpot dot placement (desktop defaults: hide; mobile shows near chips) */
+.jackpotWrap{
+  display: none;
+}
+
+.btn{
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(215,225,230,0.18);
+  background: rgba(20,20,20,0.80);
+  color: #ffffff; /* solid white labels */
+  font-weight: 900;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  text-shadow: 0 1px 0 rgba(0,0,0,0.65);
+}
+
+.btn:disabled{
+  /* Keep label readable even when disabled */
+  opacity: 1;
+  color: #ffffff;
+  cursor: not-allowed;
+  filter: brightness(0.92);
+}
+
+/* ---------------------------
+   Mobile / small screens
+   --------------------------- */
+@media (max-width: 820px){
+  :root{
+    --cardW: 62px;
+    --cardH: 88px;
+  }
+
+  .table{
+    padding: 12px 10px 18px;
+  }
+
+  .rail{
+    align-items: flex-start;
+    gap: 10px;
+    flex-wrap: wrap;
+    min-height: 148px;
+  }
+
+  /* Mobile: always use the OLD header art (Telegram iPhone). */
+  @media (max-width: 520px){
+    :root{ --cardW: 48px; --cardH: 66px; } /* iPhone baseline (matches the "good" sizing) */
+    html, body{ overflow-x: hidden; }
+
+    .rail{
+      /* iPhone: use the OLD header art and FIT it (no cropping) */
+      background-image: url('/submissions/pai-gow/header-bg-mobile.jpg') !important;
+      /* Fill the header width (no side letterboxing). */
+      background-size: cover !important;
+      background-repeat: no-repeat !important;
+      background-position: 45% 50% !important;
+      background-color: rgba(0,0,0,0.10);
+      min-height: 210px;
+
+      /* Critical: mobile header must not be a 2-col grid (causes right-edge clipping in TG/iOS) */
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto auto;
+      row-gap: 10px;
+      padding-right: 12px;
+      padding-left: 12px;
+    }
+
+    .brand{
+      /* Pin brand to the very top-left so it sits above the frog hat area */
+      position: absolute;
+      left: 12px;
+      top: 8px;
+      right: 120px; /* leave room for Place bet button on the right, but keep enough width for the title */
+
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+
+      min-width: 0;
+      padding-right: 0;
+    }
+
+    /* Push title + instruction text to the right so it doesn't sit on top of the frog */
+    .brand > div{
+      padding-left: 54px;
+      display: block;
+      min-width: 0;
+    }
+
+    /* Keep "Pai Gow" on ONE line (no Pai / Gow wrap) */
+    .brand .title{
+      font-size: 16px;
+      line-height: 1.05;
+      white-space: nowrap;
+    }
+
+    /* Step lines under the title (each phrase on its own line; NO bullets) */
+    .brand .sub{
+      margin-top: 2px;
+      font-size: 12px;
+      opacity: 0.78;
+      max-width: 250px;
+      line-height: 1.15;
+    }
+
+    .brand .subStep{
+      display: block;
+      white-space: nowrap; /* keep "dealer flips →" on one line */
+    }
+
+    /* Mobile: make DEALER / PLAYER labels bigger + solid white */
+    .zoneLabel{ font-size: 16px; letter-spacing: 1.2px; }
+
+    /* Mobile: dealer results line after arranged = solid white + readable */
+    .dealerZone[data-arranged="true"] .dealerStatus{
+      color: rgba(255,255,255,0.92) !important;
+      opacity: 1 !important;
+      font-weight: 800;
+      text-shadow: 0 1px 0 rgba(0,0,0,0.75);
+    }
+
+    .controls{
+      /* override max-820 absolute positioning that causes right-edge clipping */
+      position: static;
+      top: auto;
+      right: auto;
+      transform: none;
+
+      width: 100%;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      margin-top: -28px; /* move Place bet higher into the open header space */
+    }
+    .controls .btn{
+      flex: 1 1 140px;
+      min-width: 0;
+    }
+
+    /* Prevent any horizontal drift */
+    .tableWrap,
+    .pgLayout,
+    .rail,
+    .felt,
+    .zones,
+    .zone,
+    .betZone,
+    .playerZone,
+    .dealerZone{
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      overflow-x: hidden;
+    }
+
+    /* Force the inner table itself to obey the wrapper width (it was expanding to content width) */
+    .table{
+      /* Tailwind's `.table` utility sets display: table which can size-to-content.
+         Force block so it respects the wrapper width on iOS/TG. */
+      display: block !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: hidden;
+      box-sizing: border-box;
+    }
+
+    /* Dealer: start size should match player's pre-split rack size.
+       Once dealer is arranged (HIGH/LOW split), it can use the larger default size. */
+    .dealerZone[data-arranged="false"]{ --cardW: 44px; --cardH: 66px; }
+
+    /* Player: keep 7 cards fitting across until the user has actually split (then allow larger) */
+    .playerZone[data-split="false"]{ --cardW: 44px; --cardH: 66px; }
+
+    /* Slightly tighter spacing in the 7-card rack rows */
+    .playerZone .cardsRow,
+    .dealerZone .cardsRow{ gap: 6px; }
+
+    /* Critical: flex children must be allowed to shrink (prevents right-edge clipping in iOS/TG) */
+    .brand,
+    .controls,
+    .zoneHeader,
+    .zoneHeader > div,
+    .playerZone .zoneHeader > div{
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    /* Make button rows wrap instead of forcing overflow */
+    .controls,
+    .playerZone .zoneHeader > div{
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+    .controls .btn,
+    .playerZone .zoneHeader .btn{
+      max-width: 100%;
+    }
+  }
+
+  .brand{
+    flex: 1 1 240px;
+    min-width: 240px;
+    padding-right: 160px; /* leave space for top-right controls */
+  }
+
+  .controls{
+    width: auto;
+    justify-content: flex-end;
+    position: absolute;
+    right: 12px;
+    top: 62%;
+    transform: translateY(-50%);
+  }
+
+  .zone{
+    padding: 12px;
+  }
+
+  .zoneHeader{
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  /* Mobile: bets as a 2x2 grid:
+     BONUS | PUSH
+     MAIN  | CLEAR
+  */
+  .betLane{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 12px 10px 6px;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: visible;
+    align-items: stretch;
+  }
+
+  .betSpotBonus{ width: auto; }
+  .betSpotPush{ width: auto; }
+  .betSpotMain{ width: auto; grid-column: auto; }
+
+  /* Clear button: small pill on the RIGHT of MAIN */
+  .betClearBtn{
+    width: 100%;
+    align-self: center;
+    justify-self: end;
+    min-height: 52px;
+    padding: 10px 12px;
+    border-radius: 18px;
+    border: 1px solid rgba(215,225,230,0.22);
+    background: rgba(12,12,12,0.72);
+    color: rgba(255,255,255,0.92);
+    font-weight: 950;
+    letter-spacing: 1px;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.65);
+    cursor: pointer;
+  }
+  .betClearBtn:disabled{
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  /* hide JACKPOT pill on mobile until progressive is real */
+  .jackpotPill{ display:none; }
+
+  /* tighten chip-stack-to-label spacing on mobile */
+  .betSpot .betContent{ padding-left: 64px; }
+  .betSpotBonus .betContent{ padding-left: 70px; }
+
+  .betSpot{
+    width: 136px;
+    height: 82px;
+    flex: 0 0 auto;
+  }
+
+  .betSpotMain{
+    width: 176px;
+    height: 94px;
+  }
+
+  .betSpotPush{
+    width: 132px;
+    height: 82px;
+  }
+
+  .jackpotWrap{
+    width: 22px;
+    height: 22px;
+  }
+
+  .jackpotDot{
+    width: 12px;
+    height: 12px;
+  }
+
+  .chip{
+    width: 46px;
+    height: 46px;
+  }
+}
+
+/* NOTE: legacy iPhone overrides removed.
+   Mobile iPhone behavior is controlled by the nested @media (max-width: 520px) block inside the 820px section above.
+   This prevents conflicting header sizing/cropping rules. */
+
+  .betSpotBonus .betContent{
+    padding-left: 76px;
+  }
+}
+
+/* ---------------------------
+   Results modal
+--------------------------- */
+.resModalOverlay{
+  /* Results modal renders inside GameWindow (position:relative + overflow:hidden),
+     so constrain to the square instead of the full viewport. */
+  position: absolute;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+.resModalBg{
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(8px);
+}
+
+.resModal{
+  position: relative;
+  width: min(520px, 100%);
+  max-height: 100%;
+
+  border-radius: 18px;
+  border: 1px solid rgba(215,225,230,0.16);
+  background: linear-gradient(180deg, rgba(18,18,18,0.96), rgba(10,10,10,0.88));
+  box-shadow:
+    0 20px 80px rgba(0,0,0,0.65),
+    0 0 0 1px rgba(0,0,0,0.35);
+
+  /* less wasted space at the top */
+  padding: 10px 10px 10px;
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.resModalTop{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap: 6px;
+}
+
+.resTitle{
+  font-weight: 950;
+  letter-spacing: 1.1px;
+  opacity: 0.92;
+  font-size: 22px;
+  line-height: 1.05;
+}
+
+.resSub{
+  margin-top: 4px;
+  font-size: 14px;
+  opacity: 0.78;
+  line-height: 1.15;
+}
+
+.resClose{
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  border: 1px solid rgba(215,225,230,0.16);
+  background: rgba(20,20,20,0.85);
+  color: rgba(255,255,255,0.8);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.resNetRow{
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(215,225,230,0.12);
+  background: rgba(0,0,0,0.22);
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+}
+
+.resNetLabel{
+  font-weight: 900;
+  letter-spacing: 1px;
+  opacity: 0.78;
+  font-size: 14px;
+}
+
+.resNet{
+  font-size: 30px;
+  font-weight: 1000;
+  letter-spacing: 0.6px;
+  line-height: 1.05;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.65), 0 0 16px rgba(0,0,0,0.55);
+}
+
+.resNetPos{ color: rgba(140,255,0,0.92); }
+.resNetNeg{ color: rgba(255, 90, 90, 0.92); }
+.resNetZero{ color: rgba(235,240,244,0.86); }
+
+.resBreakdown{
+  margin-top: 8px;
+  padding: 12px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(215,225,230,0.12);
+  background: rgba(0,0,0,0.18);
+
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.resLine{
+  display:flex;
+  justify-content:space-between;
+  gap: 12px;
+  padding: 10px 6px;
+  border-top: 1px solid rgba(215,225,230,0.07);
+}
+
+.resLine:first-child{ border-top: 0; }
+
+.resKey{
+  font-weight: 950;
+  letter-spacing: 1px;
+  opacity: 0.86;
+  font-size: 16px; /* bigger breakdown labels */
+}
+
+.resVal{
+  font-weight: 1000;
+  letter-spacing: 0.4px;
+  opacity: 0.96;
+  font-size: 16px; /* bigger breakdown numbers */
+  font-variant-numeric: tabular-nums;
+}
+
+.resActions{
+  margin-top: 12px;
+  display:flex;
+  gap: 10px;
+  justify-content:flex-end;
+  flex-wrap: wrap;
+}
+
+.resFine{
+  margin-top: 10px;
+  font-size: 16px; /* make Outcome line easier to read */
+  opacity: 0.80;
+  line-height: 1.35;
+}
+
+@media (max-width: 520px){
+  .resModalOverlay{ padding: 10px; }
+  .resModal{ padding: 10px; }
+  .resTitle{ font-size: 20px; }
+  .resSub{ font-size: 13px; }
+  .resNet{ font-size: 26px; }
+  .resKey{ font-size: 15px; }
+  .resVal{ font-size: 15px; }
+  .resFine{ font-size: 15px; }
+  .resActions .btn{ font-size: 14px; padding: 11px 12px; }
+}
+
+/* Mobile/tablet: keep controls visible (no clipping in iOS in-app browsers) */
+@media (max-width: 820px){
+
+  .dealerHeader{
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  /* Mobile: put Play on its own line so it can never disappear */
+  .dealerHeaderControls{
+    width: 100%;
+    justify-content: flex-start;
+    padding-right: 10px;
+    box-sizing: border-box;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .dealerStatus{
+    flex: 1 1 100%;
+    min-width: 0;
+    white-space: normal;
+  }
+  .dealerHeaderControls .btn{
+    flex: 1 1 100%;
+    width: 100%;
+    padding: 9px 12px;
+  }
+
+  .playerHeaderControls{
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 420px){
+  :root{
+    --cardW: 50px;
+    --cardH: 72px;
+  }
+
+  .sub{ display:none; }
+
+  .betSpot{
+    width: 46%;
+    height: 78px;
+  }
+
+  .betSpotMain{
+    width: 54%;
+    height: 90px;
+  }
+}
+
+/* Poker-chip treatment (rack chips) */
+.chip{
+  /* defaults; overridden per denom via style vars */
+  --chipColor: #2a2a2a;
+  --chipStripe: rgba(235,240,244,0.95);
+
+  position: relative;
+  border-radius: 999px;
+  background:
+    /* base */
+    radial-gradient(circle at 35% 28%, rgba(255,255,255,0.22), rgba(255,255,255,0.06) 30%, rgba(255,255,255,0.0) 55%),
+    linear-gradient(180deg, rgba(255,255,255,0.10), rgba(0,0,0,0.30)),
+    var(--chipColor);
+
+  box-shadow:
+    0 14px 22px rgba(0,0,0,0.55),
+    inset 0 2px 0 rgba(255,255,255,0.22),
+    inset 0 -12px 16px rgba(0,0,0,0.42);
+}
+
+/* edge stripes ring */
+.chip::before{
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: 999px;
+  background:
+    conic-gradient(
+      from 0deg,
+      var(--chipStripe) 0deg 12deg,
+      rgba(255,255,255,0) 12deg 32deg,
+      var(--chipStripe) 32deg 44deg,
+      rgba(255,255,255,0) 44deg 74deg,
+      var(--chipStripe) 74deg 86deg,
+      rgba(255,255,255,0) 86deg 116deg,
+      var(--chipStripe) 116deg 128deg,
+      rgba(255,255,255,0) 128deg 158deg,
+      var(--chipStripe) 158deg 170deg,
+      rgba(255,255,255,0) 170deg 200deg,
+      var(--chipStripe) 200deg 212deg,
+      rgba(255,255,255,0) 212deg 242deg,
+      var(--chipStripe) 242deg 254deg,
+      rgba(255,255,255,0) 254deg 284deg,
+      var(--chipStripe) 284deg 296deg,
+      rgba(255,255,255,0) 296deg 326deg,
+      var(--chipStripe) 326deg 338deg,
+      rgba(255,255,255,0) 338deg 360deg
+    );
+
+  /* punch out the center so only the rim shows */
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 10px), #000 calc(100% - 9px));
+          mask: radial-gradient(farthest-side, transparent calc(100% - 10px), #000 calc(100% - 9px));
+
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+/* center label ring */
+.chip::after{
+  content: '';
+  position: absolute;
+  inset: 9px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 40% 30%, rgba(255,255,255,0.18), rgba(255,255,255,0.0) 55%),
+    linear-gradient(180deg, rgba(255,255,255,0.12), rgba(0,0,0,0.25)),
+    rgba(10,10,10,0.18);
+  border: 2px solid rgba(255,255,255,0.14);
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,0.18),
+    inset 0 -10px 14px rgba(0,0,0,0.35);
+  opacity: 0.95;
+  pointer-events: none;
+}
+
+.chipActive{
+  transform: translateY(-1px);
+  box-shadow:
+    0 18px 26px rgba(0,0,0,0.60),
+    0 0 0 2px rgba(140,255,0,0.18),
+    inset 0 2px 0 rgba(255,255,255,0.24),
+    inset 0 -10px 14px rgba(0,0,0,0.35);
+}
+
+/* ---------------------------
+   Chip stacks on bet spots
+   --------------------------- */
+.chipStack{
+  position: absolute;
+  left: 14px;
+  bottom: 10px;
+  width: 54px;
+  height: 74px;
+  overflow: visible; /* allow stacks to rise above the bet pill */
+  pointer-events: none;
+  filter: drop-shadow(0 10px 14px rgba(0,0,0,0.55));
+}
+
+.stackChip{
+  /* match rack poker-chip look */
+  --chipStripe: rgba(235,240,244,0.95);
+
+  position: absolute;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+
+  background:
+    radial-gradient(circle at 35% 28%, rgba(255,255,255,0.22), rgba(255,255,255,0.06) 30%, rgba(255,255,255,0.0) 55%),
+    linear-gradient(180deg, rgba(255,255,255,0.10), rgba(0,0,0,0.30)),
+    var(--chipColor, #2a2a2a);
+  border: 2px solid rgba(0,0,0,0.45);
+
+  box-shadow:
+    0 10px 16px rgba(0,0,0,0.58),
+    inset 0 2px 0 rgba(255,255,255,0.22),
+    inset 0 -12px 16px rgba(0,0,0,0.44);
+
+  opacity: 1;
+  will-change: transform;
+
+  display: grid;
+  place-items: center;
+  color: rgba(250,250,250,0.96);
+  font-weight: 950;
+  font-size: 13px;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.75);
+}
+
+/* rim stripes */
+.stackChip::before{
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: 999px;
+  background:
+    conic-gradient(
+      from 0deg,
+      var(--chipStripe) 0deg 12deg,
+      rgba(255,255,255,0) 12deg 32deg,
+      var(--chipStripe) 32deg 44deg,
+      rgba(255,255,255,0) 44deg 74deg,
+      var(--chipStripe) 74deg 86deg,
+      rgba(255,255,255,0) 86deg 116deg,
+      var(--chipStripe) 116deg 128deg,
+      rgba(255,255,255,0) 128deg 158deg,
+      var(--chipStripe) 158deg 170deg,
+      rgba(255,255,255,0) 170deg 200deg,
+      var(--chipStripe) 200deg 212deg,
+      rgba(255,255,255,0) 212deg 242deg,
+      var(--chipStripe) 242deg 254deg,
+      rgba(255,255,255,0) 254deg 284deg,
+      var(--chipStripe) 284deg 296deg,
+      rgba(255,255,255,0) 296deg 326deg,
+      var(--chipStripe) 326deg 338deg,
+      rgba(255,255,255,0) 338deg 360deg
+    );
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 10px), #000 calc(100% - 9px));
+          mask: radial-gradient(farthest-side, transparent calc(100% - 10px), #000 calc(100% - 9px));
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+/* inner label */
+.stackChip::after{
+  content: '';
+  position: absolute;
+  inset: 9px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 40% 30%, rgba(255,255,255,0.18), rgba(255,255,255,0.0) 55%),
+    linear-gradient(180deg, rgba(255,255,255,0.12), rgba(0,0,0,0.25)),
+    rgba(10,10,10,0.18);
+  border: 2px solid rgba(255,255,255,0.14);
+  opacity: 0.95;
+  pointer-events: none;
+}
+
+/* color by denomination */
+.stackChip.chipV1{ --chipColor: #2a2a2a; }
+.stackChip.chipV5{ --chipColor: #1e4a86; }
+.stackChip.chipV10{ --chipColor: #9a6a10; }
+.stackChip.chipV25{ --chipColor: #2d7a21; }
+.stackChip.chipV100{ --chipColor: #3a3a3a; }
+
+/* Paytable info hover */
+.infoWrap{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.infoIcon{
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  border: 1px solid rgba(215,225,230,0.22);
+  background: rgba(20,20,20,0.85);
+  color: var(--text);
+  font-weight: 900;
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.infoPopover{
+  display: none;
+  position: relative;
+  left: auto;
+  top: auto;
+  transform: none;
+
+  width: min(360px, calc(100vw - 24px));
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(215,225,230,0.14);
+  background: rgba(11,11,11,0.98);
+  box-shadow: 0 24px 70px rgba(0,0,0,0.78);
+  z-index: 2147483647;
+}
+
+.infoPopoverOpen{ display: block; }
+
+.paytableOverlay{
+  position: fixed;
+  inset: 0;
+  z-index: 2147483646;
+  display: grid;
+  place-items: center;
+  background: rgba(0,0,0,0.35);
+  pointer-events: auto;
+}

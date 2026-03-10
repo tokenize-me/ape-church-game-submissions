@@ -1,0 +1,23 @@
+{
+  "team": "asen-vox",
+  "gameName": "pai-gow",
+  "displayTitle": "Pai Gow (Face Up)",
+  "description": "Face-up Pai Gow: dealer flips and arranges, you reveal and split, then hands settle with optional side bets.",
+  "authors": [
+    {
+      "name": "Asen Vox",
+      "telegram": "Man3Faces"
+    }
+  ],
+  "status": "pending",
+  "category": "card",
+  "tags": ["card", "pai-gow", "casino"],
+  "thumbnail": "/pai-gow/card.jpg",
+  "banner": "/pai-gow/banner.jpg",
+  "mainComponent": "PaiGowGame.tsx",
+  "windowComponent": "PaiGowGameWindow.tsx",
+  "setupComponent": "PaiGowSetupCard.tsx",
+  "configFile": "paiGowConfig.ts",
+  "version": "1.0.0",
+  "submittedAt": "2026-03-06"
+}
