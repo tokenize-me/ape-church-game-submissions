@@ -54,19 +54,19 @@ jobs:
             echo "✓ components/games/$GAME/ exists and is non-empty"
           fi
 
-          # public/[game]/card.(png|jpg|webp)
-          CARD_FILE=$(find "public/$GAME" -maxdepth 1 -name 'card.png' -o -name 'card.jpg' -o -name 'card.webp' 2>/dev/null | head -1)
+          # public/submissions/[game]/card.(png|jpg|webp)
+          CARD_FILE=$(find "public/submissions/$GAME" -maxdepth 1 -name 'card.png' -o -name 'card.jpg' -o -name 'card.webp' 2>/dev/null | head -1)
           if [ -z "$CARD_FILE" ]; then
-            echo "::error::MISSING: public/$GAME/card.{png,jpg,webp}"
+            echo "::error::MISSING: public/submissions/$GAME/card.{png,jpg,webp}"
             FAIL=1
           else
             echo "✓ $CARD_FILE"
           fi
 
-          # public/[game]/banner.(png|jpg|webp)
-          BANNER_FILE=$(find "public/$GAME" -maxdepth 1 -name 'banner.png' -o -name 'banner.jpg' -o -name 'banner.webp' 2>/dev/null | head -1)
+          # public/submissions/[game]/banner.(png|jpg|webp)
+          BANNER_FILE=$(find "public/submissions/$GAME" -maxdepth 1 -name 'banner.png' -o -name 'banner.jpg' -o -name 'banner.webp' 2>/dev/null | head -1)
           if [ -z "$BANNER_FILE" ]; then
-            echo "::error::MISSING: public/$GAME/banner.{png,jpg,webp}"
+            echo "::error::MISSING: public/submissions/$GAME/banner.{png,jpg,webp}"
             FAIL=1
           else
             echo "✓ $BANNER_FILE"
